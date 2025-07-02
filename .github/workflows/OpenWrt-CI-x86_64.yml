@@ -201,6 +201,9 @@ jobs:
     - name: Prepare artifact
       working-directory: ./openwrt
       run : |
+        set +e
+        ls ./bin/packages/
+
         mkdir -p ./artifact/firmware
         mkdir -p ./artifact/package
         mkdir -p ./artifact/buildinfo
