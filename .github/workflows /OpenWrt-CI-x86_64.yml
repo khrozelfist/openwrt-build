@@ -186,11 +186,6 @@ jobs:
 
         make defconfig
 
-#   - name: Make download
-#     run : |
-#       make download -j$(nproc) || make download -j1 V=s
-#       rm -rf $(find ./dl/ -size -1024c)
-
     - name: Build firmware
       run : |
         make -j$(nproc) || make -j1 V=s
