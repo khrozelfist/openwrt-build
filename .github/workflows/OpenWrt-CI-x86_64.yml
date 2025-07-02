@@ -49,6 +49,7 @@ jobs:
     - name: Update & Install feeds
       working-directory: ./openwrt
       run : |
+        sed -i 's,git.openwrt.org,github.com/openwrt,' feeds.conf.default
         ./scripts/feeds update -a
         rm -rf ./feeds/packages/net/smartdns
         rm -rf ./feeds/luci/applications/luci-app-smartdns
