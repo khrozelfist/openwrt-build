@@ -67,7 +67,6 @@ jobs:
         git clone https://github.com/pymumu/luci-app-smartdns ./package/luci-app-smartdns/
         sed -i '/^Package: smartdns$/,/^$/d' ./feeds/packages.index
         sed -i '/^Package: luci-app-smartdns$/,/^$/d' ./feeds/luci.index
-        # smartdns needs rust/host
         # sed -i '/:rust\/host/d' ./package/smartdns/Makefile
         mkdir -p ./package/lang
         git clone https://github.com/openwrt/packages.git openwrt-packages
