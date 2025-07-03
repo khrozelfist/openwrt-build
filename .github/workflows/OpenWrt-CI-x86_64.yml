@@ -201,9 +201,6 @@ jobs:
     - name: Prepare artifact
       working-directory: ./openwrt
       run : |
-        set +e
-        ls ./bin/packages/
-
         mkdir -p ./artifact/firmware
         mkdir -p ./artifact/package
         mkdir -p ./artifact/buildinfo
@@ -212,7 +209,8 @@ jobs:
         # rm -rf $(find ./artifact/firmware/ -type f -name "*.tar.gz")
         rm -rf $(find ./artifact/firmware/ -type f -name "*.bin")
         rm -rf $(find ./artifact/firmware/ -type f -name "*.img*" | grep -v "combined-efi")
-        cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
+        # cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
+        cp -rf $(find ./bin/packages/ -type f) ./artifact/package/
         cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
 
     - name: Deliver buildinfo
