@@ -37,7 +37,7 @@ jobs:
         TAG=$(git tag | sort | tail -1 | awk -F '-' '{print$1}')
         git tag | grep $TAG$ || TAG=$(git tag | sort | tail -1)
         echo "tag=$TAG" >> $GITHUB_ENV
-        echo "sha=$(date | sha1sum | cut -c -8)" >> $GITHUB_ENV
+        echo "date=$(date "+%Y%m%d%H%M")" >> $GITHUB_ENV
 
     - name: Pre-feeds
       working-directory: ./openwrt
@@ -57,20 +57,20 @@ jobs:
         ./scripts/feeds update -a
         rm -rf ./feeds/packages/net/smartdns
         rm -rf ./feeds/luci/applications/luci-app-smartdns
+        git clone https://github.com/pymumu/openwrt-smartdns ./feeds/packages/net/smartdns
+        git clone https://github.com/pymumu/luci-app-smartdns ./feeds/luci/applications/luci-app-smartdns/
         ./scripts/feeds install -a
         # ./scripts/feeds install -a -f
 
     - name: Post-feeds
       working-directory: ./openwrt
       run : |
-        git clone https://github.com/pymumu/openwrt-smartdns ./package/smartdns/
-        git clone https://github.com/pymumu/luci-app-smartdns ./package/luci-app-smartdns/
-        sed -i '/^Package: smartdns$/,/^$/d' ./feeds/packages.index
-        sed -i '/^Package: luci-app-smartdns$/,/^$/d' ./feeds/luci.index
+        # sed -i '/^Package: smartdns$/,/^$/d' ./feeds/packages.index
+        # sed -i '/^Package: luci-app-smartdns$/,/^$/d' ./feeds/luci.index
         # sed -i '/:rust\/host/d' ./package/smartdns/Makefile
-        mkdir -p ./package/lang
-        git clone https://github.com/openwrt/packages.git openwrt-packages
-        cp -r openwrt-packages/lang/rust package/lang/
+        # mkdir -p ./package/lang
+        # git clone https://github.com/openwrt/packages.git openwrt-packages
+        # cp -r openwrt-packages/lang/rust package/lang/
 
         sed -i '/DEFAULT:=n/d' ./feeds/packages/net/rp-pppoe/Makefile
         # sed -i 's/LOG info "Check/#LOG info "Check/' ./feeds/packages/net/mwan3/files/usr/sbin/mwan3track
@@ -219,17 +219,17 @@ jobs:
     - name: Deliver buildinfo
       uses: actions/upload-artifact@v4
       with:
-        name: OpenWrt_buildinfo_${{ env.tag }}_${{ env.sha }}
+        name: OpenWrt_buildinfo_${{ env.tag }}_${{ env.date }}
         path: ./openwrt/artifact/buildinfo/
 
     - name: Deliver package
       uses: actions/upload-artifact@v4
       with:
-        name: OpenWrt_package_${{ env.tag }}_${{ env.sha }}
+        name: OpenWrt_package_${{ env.tag }}_${{ env.date }}
         path: ./openwrt/artifact/package/
 
     - name: Deliver firmware
       uses: actions/upload-artifact@v4
       with:
-        name: OpenWrt_firmware_${{ env.tag }}_${{ env.sha }}
+        name: OpenWrt_firmware_${{ env.tag }}_${{ env.date }}
         path: ./openwrt/artifact/firmware/
