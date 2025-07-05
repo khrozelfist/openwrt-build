@@ -86,6 +86,7 @@ jobs:
     - name: Generate configuration file
       working-directory: ./openwrt
       run : |
+        git checkout ${{env.tag}}
         ver=$(echo ${{env.tag}} | cut -c 2-)
         rm -f ./.config*
         curl -Ls https://downloads.openwrt.org/releases/$ver/targets/x86/64/config.buildinfo | grep -e _TARGET_ -e _PACKAGE_ -e _VERSION_ >> ./.config
