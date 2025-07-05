@@ -8,9 +8,9 @@ jobs:
     name: Build OpenWrt firmware
     runs-on: ubuntu-latest
     steps:
-    - name: Test
-      run : |
-        # read -p "pause"
+#   - name: Test
+#     run : |
+#       read -p "pause"
 
     - name: Initialization environment
       env:
@@ -55,23 +55,18 @@ jobs:
         sed -i 's|https://git.openwrt.org/feed/telephony.git|https://github.com/openwrt/telephony.git|' feeds.conf.default
 
         ./scripts/feeds update -a
+
         rm -rf ./feeds/packages/net/smartdns
         rm -rf ./feeds/luci/applications/luci-app-smartdns
         git clone https://github.com/pymumu/openwrt-smartdns ./feeds/packages/net/smartdns
         git clone https://github.com/pymumu/luci-app-smartdns ./feeds/luci/applications/luci-app-smartdns/
+
         ./scripts/feeds install -a
         # ./scripts/feeds install -a -f
 
     - name: Post-feeds
       working-directory: ./openwrt
       run : |
-        # sed -i '/^Package: smartdns$/,/^$/d' ./feeds/packages.index
-        # sed -i '/^Package: luci-app-smartdns$/,/^$/d' ./feeds/luci.index
-        # sed -i '/:rust\/host/d' ./package/smartdns/Makefile
-        # mkdir -p ./package/lang
-        # git clone https://github.com/openwrt/packages.git openwrt-packages
-        # cp -r openwrt-packages/lang/rust package/lang/
-
         sed -i '/DEFAULT:=n/d' ./feeds/packages/net/rp-pppoe/Makefile
         # sed -i 's/LOG info "Check/#LOG info "Check/' ./feeds/packages/net/mwan3/files/usr/sbin/mwan3track
 
@@ -106,7 +101,7 @@ jobs:
         # CONFIG_TARGET_EXT4_BLOCKSIZE=4096
         EOF
 
-        # cat >> .config <<EOF
+        # cat >> ./.config <<EOF
         # CONFIG_PACKAGE_kmod-kvm-intel=y
         # CONFIG_PACKAGE_kmod-kvm-amd=y
         # CONFIG_PACKAGE_kmod-tun=y
@@ -115,7 +110,7 @@ jobs:
         # CONFIG_PACKAGE_qemu-img=y
         # EOF
 
-        cat >> .config <<EOF
+        cat >> ./.config <<EOF
         CONFIG_PACKAGE_kmod-bnx2x=y
         CONFIG_PACKAGE_kmod-mt7921e=y
         CONFIG_PACKAGE_kmod-tcp-bbr=y
@@ -213,8 +208,7 @@ jobs:
         # rm -rf $(find ./artifact/firmware/ -type f -name "*.tar.gz")
         rm -rf $(find ./artifact/firmware/ -type f -name "*.bin")
         rm -rf $(find ./artifact/firmware/ -type f -name "*.img*" | grep -v "combined-efi")
-        # cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
-        cp -rf $(find ./bin/packages/ -type f) ./artifact/package/
+        cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
         cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
 
     - name: Deliver buildinfo
