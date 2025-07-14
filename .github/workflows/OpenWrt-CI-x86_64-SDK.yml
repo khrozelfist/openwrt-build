@@ -37,7 +37,7 @@ jobs:
         wget -q https://downloads.openwrt.org/releases/$VER/targets/x86/64/$SDK
         sudo -E apt-get update
         sudo -E apt-get install -y zstd
-        tar --quiet -I zstd -xvf $SDK
+        tar -I zstd -xvf $SDK
         mkdir -p openwrt
         mv openwrt-sdk-*/* openwrt/
         rm -rf openwrt-sdk-*
