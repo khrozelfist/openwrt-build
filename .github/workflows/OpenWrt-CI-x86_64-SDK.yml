@@ -22,6 +22,7 @@ jobs:
         apt-get -y autoremove --purge && apt-get clean
 
     - name: Get OpenWrt SDK
+#     working-directory: /tmp
       run : |
         VER=$(curl -Ls https://downloads.openwrt.org/releases/ | grep -oP 'href="\K[0-9]+.*(?=/")' | sort -V | tail -n1)
         SDK=$(curl -Ls https://downloads.openwrt.org/releases/$VER/targets/x86/64/ | grep -oP '(?<=href=")openwrt-sdk[^"]+')
