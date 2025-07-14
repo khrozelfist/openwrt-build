@@ -15,7 +15,7 @@ jobs:
 #       read -p "pause"
 
     - name: Initialization environment
-      run : apt update && apt install -y curl wget
+      run : apt update && apt install -y curl wget sudo
 
     - name: Get OpenWrt SDK
       run : |
