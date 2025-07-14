@@ -52,10 +52,11 @@ jobs:
       working-directory: ./openwrt
       run : |
         git checkout ${{env.tag}}
-        # sed -i 's|https://git.openwrt.org/feed/packages.git|https://github.com/openwrt/packages.git|' feeds.conf.default
-        # sed -i 's|https://git.openwrt.org/project/luci.git|https://github.com/openwrt/luci.git|' feeds.conf.default
-        # sed -i 's|https://git.openwrt.org/feed/routing.git|https://github.com/openwrt/routing.git|' feeds.conf.default
-        # sed -i 's|https://git.openwrt.org/feed/telephony.git|https://github.com/openwrt/telephony.git|' feeds.conf.default
+        # sed -i 's|git.openwrt.org/openwrt/openwrt.git|github.com/openwrt/openwrt.git|' feeds.conf.default
+        # sed -i 's|git.openwrt.org/feed/packages.git|github.com/openwrt/packages.git|' feeds.conf.default
+        # sed -i 's|git.openwrt.org/project/luci.git|github.com/openwrt/luci.git|' feeds.conf.default
+        # sed -i 's|git.openwrt.org/feed/routing.git|github.com/openwrt/routing.git|' feeds.conf.default
+        # sed -i 's|git.openwrt.org/feed/telephony.git|github.com/openwrt/telephony.git|' feeds.conf.default
 
         ./scripts/feeds update -a
 
