@@ -34,10 +34,10 @@ jobs:
       run : |
         VER=$(curl -Ls https://downloads.openwrt.org/releases/ | grep -oP 'href="\K[0-9]+.*(?=/")' | sort -V | tail -n1)
         SDK=$(curl -Ls https://downloads.openwrt.org/releases/$VER/targets/x86/64/ | grep -oP '(?<=href=")openwrt-sdk[^"]+')
-        wget https://downloads.openwrt.org/releases/$VER/targets/x86/64/$SDK
-        apt-get update
-        apt-get install -y zstd
-        tar -I zstd -xvf $SDK
+        wget -q https://downloads.openwrt.org/releases/$VER/targets/x86/64/$SDK
+        sudo -E apt-get update
+        sudo -E apt-get install -y zstd
+        tar --quiet -I zstd -xvf $SDK
         mkdir -p openwrt
         mv openwrt-sdk-*/* openwrt/
         rm -rf openwrt-sdk-*
