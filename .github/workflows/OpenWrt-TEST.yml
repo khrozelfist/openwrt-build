@@ -67,7 +67,7 @@ jobs:
         ver=$(echo ${{env.tag}} | cut -c 2-)
         rm -f ./.config*
         # curl -Ls https://downloads.openwrt.org/releases/$ver/targets/x86/64/config.buildinfo | grep -e CONFIG_TARGET_ -e CONFIG_KERNEL_ -e CONFIG_PACKAGE_ -e CONFIG_VERSION_ >> ./.config
-        # curl -Ls https://downloads.openwrt.org/releases/$ver/targets/x86/64/config.buildinfo | grep -e CONFIG_TARGET_ >> ./.config
+        curl -Ls https://downloads.openwrt.org/releases/$ver/targets/x86/64/config.buildinfo | grep -e CONFIG_TARGET_ >> ./.config
         # ./scripts/diffconfig.sh > diffconfig
         # cp diffconfig .config
         make defconfig
