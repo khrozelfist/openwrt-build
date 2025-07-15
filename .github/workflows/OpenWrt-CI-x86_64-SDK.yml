@@ -9,7 +9,7 @@ jobs:
     outputs:
       ver: ${{steps.getver.outputs.ver}}
     steps:
-    - name: Get latest version
+    - name: Get SDK version
       id: getver
       run : |
         VER=$(curl -Ls https://downloads.openwrt.org/releases/ | grep -oP 'href="\K[0-9]+.*(?=/")' | sort -V | tail -n1)
