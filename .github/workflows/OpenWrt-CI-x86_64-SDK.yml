@@ -22,7 +22,7 @@ jobs:
       image: ghcr.io/openwrt/sdk:x86-64-${{needs.get_version.outputs.ver}}
     steps:
     - name: Pre-feeds
-      working-directory: ./openwrt
+#     working-directory: /tmo
       run: |
         echo "ver=${{needs.get_version.outputs.ver}}" >> $GITHUB_ENV
         echo "date=$(date "+%Y%m%d%H%M")" >> $GITHUB_ENV
@@ -31,7 +31,6 @@ jobs:
         # wget -O $(ls -d ./target/linux/x86/patches-*)/600-bnx2x-warpcore-8727-2g5.patch https://raw.githubusercontent.com/JAMESMTL/snippets/master/bnx2x/patches/bnx2x_warpcore_8727_2_5g_sgmii_txfault.patch
 
     - name: Update & Install feeds
-      working-directory: ./openwrt
       run : |
         sed -i 's|git.openwrt.org/openwrt/openwrt.git|github.com/openwrt/openwrt.git|' feeds.conf.default
         sed -i 's|git.openwrt.org/feed/packages.git|github.com/openwrt/packages.git|' feeds.conf.default
@@ -50,7 +49,6 @@ jobs:
         # ./scripts/feeds install -a -f
 
     - name: Post-feeds
-      working-directory: ./openwrt
       run : |
         sed -i '/DEFAULT:=n/d' ./feeds/packages/net/rp-pppoe/Makefile
         # sed -i 's/LOG info "Check/#LOG info "Check/' ./feeds/packages/net/mwan3/files/usr/sbin/mwan3track
@@ -64,7 +62,6 @@ jobs:
         echo chmod +x /usr/bin/gost > ./files/etc/uci-defaults/99-gost
 
     - name: Generate configuration file
-      working-directory: ./openwrt
       run : |
         rm -f ./.config*
         curl -Ls https://downloads.openwrt.org/releases/${{env.ver}}/targets/x86/64/config.buildinfo | grep -e CONFIG_TARGET_ -e CONFIG_KERNEL_ -e CONFIG_PACKAGE_ -e CONFIG_VERSION_ >> ./.config
@@ -176,12 +173,10 @@ jobs:
         make defconfig
 
     - name: Build firmware
-      working-directory: ./openwrt
       run : |
         make -j$(nproc) || make -j1 V=s
 
     - name: Prepare artifact
-      working-directory: ./openwrt
       run : |
         mkdir -p ./artifact/buildinfo
         mkdir -p ./artifact/firmware
@@ -198,16 +193,16 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: OpenWrt_buildinfo_${{env.ver}}_${{env.date}}
-        path: ./openwrt/artifact/buildinfo/
+        path: ./artifact/buildinfo/
 
     - name: Deliver firmware
       uses: actions/upload-artifact@v4
       with:
         name: OpenWrt_firmware_${{env.ver}}_${{env.date}}
-        path: ./openwrt/artifact/firmware/
+        path: ./artifact/firmware/
 
     - name: Deliver package
       uses: actions/upload-artifact@v4
       with:
         name: OpenWrt_package_${{env.ver}}_${{env.date}}
-        path: ./openwrt/artifact/package/
+        path: ./artifact/package/
