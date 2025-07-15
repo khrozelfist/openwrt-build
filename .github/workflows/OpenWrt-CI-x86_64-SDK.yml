@@ -6,16 +6,20 @@ on:
 jobs:
   get_version:
     runs-on: ubuntu-latest
+    outputs:
+      ver: ${{steps.get_version.outputs.ver}}
     steps:
     - name: Get latest version
       run : |
         VER=$(curl -Ls https://downloads.openwrt.org/releases/ | grep -oP 'href="\K[0-9]+.*(?=/")' | sort -V | tail -n1)
+        echo "ver=$VER" >> $GITHUB_OUTPUT
         echo "ver=$VER" >> $GITHUB_ENV
         echo "date=$(date "+%Y%m%d%H%M")" >> $GITHUB_ENV
+
   build_openwrt:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/openwrt/sdk:x86-64-${{env.ver}}
+      image: ghcr.io/openwrt/sdk:x86-64-${{needs.get_version.outputs.ver}}
     steps:
     - name: Pre-feeds
       working-directory: ./openwrt
