@@ -30,9 +30,6 @@ jobs:
     steps:
     - name: Pre-feeds
       run: |
-        echo "Current dir: $(pwd)"
-        ls -alh
-        exit 1
         # sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' ./feeds.conf.default
         # git clone https://github.com/khrozelfist/3proxy-openwrt ./package/3proxy
         # wget -O $(ls -d ./target/linux/x86/patches-*)/600-bnx2x-warpcore-8727-2g5.patch https://raw.githubusercontent.com/JAMESMTL/snippets/master/bnx2x/patches/bnx2x_warpcore_8727_2_5g_sgmii_txfault.patch
@@ -179,16 +176,16 @@ jobs:
 
     - name: Prepare artifact
       run : |
-        mkdir -p /tmp/artifact/buildinfo
-        mkdir -p /tmp/artifact/firmware
-        mkdir -p /tmp/artifact/package
-        cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") /tmp/artifact/buildinfo/
+        mkdir -p ./artifact/buildinfo
+        mkdir -p ./artifact/firmware
+        mkdir -p ./artifact/package
+        cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
         rm -rf $(find ./bin/targets/ -type d -name "packages")
-        cp -rf $(find ./bin/targets/ -type f) /tmp/artifact/firmware/
-        # rm -rf $(find /tmp/artifact/firmware/ -type f -name "*.tar.gz")
-        rm -rf $(find /tmp/artifact/firmware/ -type f -name "*.bin")
-        rm -rf $(find /tmp/artifact/firmware/ -type f -name "*.img*" | grep -v "combined-efi")
-        cp -rf $(find ./ -type f -regex '.*\.\(ipk\|apk\)$') /tmp/artifact/package/
+        cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
+        # rm -rf $(find /builder/artifact/firmware/ -type f -name "*.tar.gz")
+        rm -rf $(find ./artifact/firmware/ -type f -name "*.bin")
+        rm -rf $(find ./artifact/firmware/ -type f -name "*.img*" | grep -v "combined-efi")
+        cp -rf $(find ./ -type f -regex '.*\.\(ipk\|apk\)$') ./artifact/package/
 
     - name: Deliver buildinfo
       uses: actions/upload-artifact@v4
