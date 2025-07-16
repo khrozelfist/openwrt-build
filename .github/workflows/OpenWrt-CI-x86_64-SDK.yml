@@ -48,6 +48,7 @@ jobs:
 
     - name: Post-feeds
       run : |
+        set -x
         sed -i '/DEFAULT:=n/d' ./feeds/packages/net/rp-pppoe/Makefile
         # sed -i 's/LOG info "Check/#LOG info "Check/' ./feeds/packages/net/mwan3/files/usr/sbin/mwan3track
 
