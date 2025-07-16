@@ -53,8 +53,8 @@ jobs:
 
         mkdir -p ./files/etc/uci-defaults
         mkdir -p ./files/usr/bin
-        gost=$(curl -s https://api.github.com/repos/go-gost/gost/releases/latest | grep -oP '"tag_name": "\K.*(?=")')
-        curl -Lso /tmp/gost.tar.gz https://github.com/go-gost/gost/releases/download/v${gost}/gost_${gost}_linux_amd64v3.tar.gz
+        gostver=$(curl -s https://api.github.com/repos/go-gost/gost/releases/latest | grep -oP '"tag_name": "v\K.*(?=")')
+        curl -Lso /tmp/gost.tar.gz https://github.com/go-gost/gost/releases/download/v${gostver}/gost_${gostver}_linux_amd64v3.tar.gz
         tar xzf /tmp/gost.tar.gz -C /tmp
         mv /tmp/gost ./files/usr/bin/gost
         echo chmod +x /usr/bin/gost > ./files/etc/uci-defaults/99-gost
