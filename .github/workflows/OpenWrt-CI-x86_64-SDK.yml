@@ -24,7 +24,7 @@ jobs:
       image: ghcr.io/openwrt/sdk:x86-64-${{needs.get_version.outputs.ver}}
     steps:
     - name: Pre-feeds
-#     working-directory: /tmp
+      working-directory: /home/build/openwrt
       run: |
         echo "Current dir: $(pwd)"
         ls -alh
