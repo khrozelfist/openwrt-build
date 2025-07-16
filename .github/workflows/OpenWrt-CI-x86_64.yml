@@ -78,7 +78,7 @@ jobs:
 
         mkdir -p ./files/etc/uci-defaults
         mkdir -p ./files/usr/bin
-        gostver=$(curl -s https://api.github.com/repos/go-gost/gost/releases/latest | grep -oP '"tag_name": "v\K.*(?=")')
+        gostver=$(curl -s https://api.github.com/repos/go-gost/gost/releases/latest | jq -r '.tag_name' | sed 's/^v//')
         curl -Lso /tmp/gost.tar.gz https://github.com/go-gost/gost/releases/download/v${gostver}/gost_${gostver}_linux_amd64v3.tar.gz
         tar xzf /tmp/gost.tar.gz -C /tmp
         mv /tmp/gost ./files/usr/bin/gost
