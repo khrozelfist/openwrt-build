@@ -27,7 +27,8 @@ jobs:
 #     working-directory: /tmp
       run: |
         echo "Current dir: $(pwd)"
-        find . -type f | grep feeds
+        cd /builder
+        ls -alh
         exit 1
         # sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' ./feeds.conf.default
         # git clone https://github.com/khrozelfist/3proxy-openwrt ./package/3proxy
