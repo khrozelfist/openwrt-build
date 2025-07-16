@@ -22,9 +22,11 @@ jobs:
     needs: get_version
     container:
       image: ghcr.io/openwrt/sdk:x86-64-${{needs.get_version.outputs.ver}}
-      options: --workdir /builder
       volumes:
         - /tmp/artifact:/builder/artifact
+    defaults:
+      run:
+        working-directory: /builder
     steps:
     - name: Pre-feeds
       run: |
