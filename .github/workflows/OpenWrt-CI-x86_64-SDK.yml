@@ -24,9 +24,10 @@ jobs:
       image: ghcr.io/openwrt/sdk:x86-64-${{needs.get_version.outputs.ver}}
     steps:
     - name: Pre-feeds
-      working-directory: /home/build/openwrt
+#     working-directory: /tmp
       run: |
         echo "Current dir: $(pwd)"
+        cd /home/build/openwrt
         ls -alh
         exit 1
         # sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' ./feeds.conf.default
