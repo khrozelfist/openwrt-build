@@ -194,6 +194,7 @@ jobs:
         # CONFIG_PACKAGE_luci-app-nlbwmon=y
         # !! docker may use all space !!
         CONFIG_PACKAGE_luci-app-dockerman=y
+        CONFIG_PACKAGE_luci-lib-docker=y
         EOF
 
         make defconfig
