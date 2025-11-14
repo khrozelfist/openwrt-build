@@ -163,6 +163,7 @@ jobs:
         CONFIG_PACKAGE_xxd=y
         CONFIG_PACKAGE_cifsmount=y
         CONFIG_PACKAGE_screen=y
+        CONFIG_PACKAGE_ncat-full=y
         CONFIG_PACKAGE_collectd-mod-thermal=y
         CONFIG_PACKAGE_collectd-mod-exec=y
         CONFIG_PACKAGE_collectd-mod-conntrack=y
