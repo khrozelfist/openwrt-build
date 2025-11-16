@@ -32,7 +32,7 @@ jobs:
 
         echo "date=$(date "+%Y%m%d%H%M")" >> $GITHUB_ENV
 
-    - name: Git
+    - name: Prepare
       run : |
         git clone https://github.com/openwrt/openwrt.git
         cd openwrt
@@ -41,19 +41,10 @@ jobs:
         echo "tag=$TAG" >> $GITHUB_ENV
         echo "ver=${TAG:1}" >> $GITHUB_ENV
 
-    - name: Pre-feeds
-      working-directory: ./openwrt
-      run: |
-        git checkout ${{env.tag}}
-
-        # sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' ./feeds.conf.default
-        # git clone https://github.com/khrozelfist/3proxy-openwrt ./package/3proxy
+        git checkout $TAG
         # wget -O $(ls -d ./target/linux/x86/patches-*)/600-bnx2x-warpcore-8727-2g5.patch https://raw.githubusercontent.com/JAMESMTL/snippets/master/bnx2x/patches/bnx2x_warpcore_8727_2_5g_sgmii_txfault.patch
 
-    - name: Update & Install feeds
-      working-directory: ./openwrt
-      run : |
-        git checkout ${{env.tag}}
+        # sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' ./feeds.conf.default
         # sed -i 's|git.openwrt.org/openwrt/openwrt.git|github.com/openwrt/openwrt.git|' feeds.conf.default
         # sed -i 's|git.openwrt.org/feed/packages.git|github.com/openwrt/packages.git|' feeds.conf.default
         # sed -i 's|git.openwrt.org/project/luci.git|github.com/openwrt/luci.git|' feeds.conf.default
@@ -66,14 +57,10 @@ jobs:
         rm -rf ./feeds/luci/applications/luci-app-smartdns
         git clone https://github.com/pymumu/openwrt-smartdns ./feeds/packages/net/smartdns
         git clone https://github.com/pymumu/luci-app-smartdns ./feeds/luci/applications/luci-app-smartdns/
+        # git clone https://github.com/khrozelfist/3proxy-openwrt ./package/3proxy
 
         ./scripts/feeds install -a
         # ./scripts/feeds install -a -f
-
-    - name: Post-feeds
-      working-directory: ./openwrt
-      run : |
-        git checkout ${{env.tag}}
 
         sed -i '/DEFAULT:=n/d' ./feeds/packages/net/rp-pppoe/Makefile
         # sed -i 's/LOG info "Check/#LOG info "Check/' ./feeds/packages/net/mwan3/files/usr/sbin/mwan3track
