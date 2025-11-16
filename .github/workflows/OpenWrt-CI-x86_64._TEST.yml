@@ -141,6 +141,7 @@ jobs:
       working-directory: ./openwrt
       run : |
         git checkout ${{env.tag}}
+        cp ./.config ./config.raw
         make -j$(nproc) || make -j1 V=s
 
     - name: Prepare artifact
@@ -150,9 +151,9 @@ jobs:
         mkdir -p ./artifact/firmware
         mkdir -p ./artifact/package
         find ./ -type f -regex '.*\.\(ipk\|apk\)$' > ./artifact/buildinfo/packages.buildinfo
-        cp ./.config ./artifact/buildinfo
-        cp -rf $(find ./bin/targets/ -type f \( -name '*.buildinfo' -o -name '*.manifest' -o -name '.config' \)) ./artifact/buildinfo/
-        rm -rf $(find ./bin/targets/ -type d -name "packages")
+        cp ././config.raw ./artifact/buildinfo
+        cp -rf $(find ./bin/targets/ -type f \( -name '*.buildinfo' -o -name '*.manifest' \)) ./artifact/buildinfo/
+        # rm -rf $(find ./bin/targets/ -type d -name "packages")
         cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
         # rm -rf $(find ./artifact/firmware/ -type f -name "*.tar.gz")
         rm -rf $(find ./artifact/firmware/ -type f -name "*.bin")
