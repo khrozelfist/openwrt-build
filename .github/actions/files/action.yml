@@ -5,7 +5,7 @@ runs:
       working-directory: ./openwrt
       shell: bash
       run : |
-        git checkout ${{env.tag}}
+        # git checkout ${{env.tag}}
         sed -i '/DEFAULT:=n/d' ./feeds/packages/net/rp-pppoe/Makefile
         # sed -i 's/LOG info "Check/#LOG info "Check/' ./feeds/packages/net/mwan3/files/usr/sbin/mwan3track
 
