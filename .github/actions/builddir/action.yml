@@ -20,16 +20,17 @@ runs:
         sed -i 's|git.openwrt.org/feed/routing.git|github.com/openwrt/routing.git|' feeds.conf.default
         sed -i 's|git.openwrt.org/feed/telephony.git|github.com/openwrt/telephony.git|' feeds.conf.default
 
+        # git clone https://github.com/khrozelfist/3proxy-openwrt ./package/3proxy
+
         ./scripts/feeds update -a
 
         rm -rf ./feeds/packages/net/smartdns
         rm -rf ./feeds/luci/applications/luci-app-smartdns
         git clone https://github.com/pymumu/openwrt-smartdns ./feeds/packages/net/smartdns
         git clone https://github.com/pymumu/luci-app-smartdns ./feeds/luci/applications/luci-app-smartdns/
-        # git clone https://github.com/khrozelfist/3proxy-openwrt ./package/3proxy
 
-        ./scripts/feeds install -a
-        # ./scripts/feeds install -a -f
+        # ./scripts/feeds install -a
+        ./scripts/feeds install -a -f
 
         sed -i '/DEFAULT:=n/d' ./feeds/packages/net/rp-pppoe/Makefile
         # sed -i 's/LOG info "Check/#LOG info "Check/' ./feeds/packages/net/mwan3/files/usr/sbin/mwan3track
