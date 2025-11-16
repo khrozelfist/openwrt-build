@@ -30,6 +30,8 @@ jobs:
         sudo -E apt-get -y autoremove --purge
         sudo -E apt-get clean
 
+        echo "date=$(date "+%Y%m%d%H%M")" >> $GITHUB_ENV
+
     - name: Git
       run : |
         git clone https://github.com/openwrt/openwrt.git
@@ -38,7 +40,6 @@ jobs:
         git tag | grep $TAG$ || TAG=$(git tag | sort | tail -1)
         echo "tag=$TAG" >> $GITHUB_ENV
         echo "ver=${TAG:1}" >> $GITHUB_ENV
-        echo "date=$(date "+%Y%m%d%H%M")" >> $GITHUB_ENV
 
     - name: Pre-feeds
       working-directory: ./openwrt
