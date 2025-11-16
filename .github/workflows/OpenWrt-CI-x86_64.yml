@@ -212,6 +212,7 @@ jobs:
         mkdir -p ./artifact/buildinfo
         mkdir -p ./artifact/firmware
         mkdir -p ./artifact/package
+        cp ./.config ./artifact/buildinfo
         cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
         rm -rf $(find ./bin/targets/ -type d -name "packages")
         cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
