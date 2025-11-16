@@ -154,7 +154,7 @@ jobs:
         mkdir -p ./artifact/buildinfo
         mkdir -p ./artifact/firmware
         mkdir -p ./artifact/package
-        find ./ -type f -regex '.*\.\(ipk\|apk\)$' > ./artifact/buildinfo/packages.buildinfo
+        find ./ -type f -regex '.*\.\(ipk\|apk\)$' > ./artifact/buildinfo/packages.path
         cp ././config.raw ./artifact/buildinfo
         cp -rf $(find ./bin/targets/ -type f \( -name '*.buildinfo' -o -name '*.manifest' \)) ./artifact/buildinfo/
         # rm -rf $(find ./bin/targets/ -type d -name "packages")
