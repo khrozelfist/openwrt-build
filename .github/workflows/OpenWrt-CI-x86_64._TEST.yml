@@ -8,17 +8,15 @@ jobs:
     name: Build OpenWrt firmware
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
-
 #   - name: Test
 #     run : |
 #       read -p "pause"
 
     - name: Initialization environment
-      uses: ./.github/actions/Init.yml
+      uses: ./.github/actions/Init
 
     - name: Prepare Buildroot
-      uses: ./.github/actions/Prepare.yml
+      uses: ./.github/actions/Prepare
 
     - name: Generate configuration file
       working-directory: ./openwrt
