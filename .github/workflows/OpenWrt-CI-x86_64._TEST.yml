@@ -14,10 +14,13 @@ jobs:
 #       read -p "pause"
 
     - name: Initialization environment
-      uses: ./.github/actions/Init
+      uses: ./.github/actions/init
 
     - name: Prepare Buildroot
-      uses: ./.github/actions/Prepare
+      uses: ./.github/actions/buildroot
+
+    - name: Prepare Files
+      uses: ./.github/actions/files
 
     - name: Generate configuration file
       working-directory: ./openwrt
