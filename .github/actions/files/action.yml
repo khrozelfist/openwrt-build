@@ -2,6 +2,7 @@ name: "Prepare Files"
 runs:
   using: "composite"
   steps:
+    - nale: Prepare Files
       working-directory: ./openwrt
       shell: bash
       run : |
