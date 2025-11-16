@@ -1,0 +1,11 @@
+name: "Prepare variable"
+runs:
+  using: "composite"
+  steps:
+    - name: Prepare variable
+      shell: bash
+      run : |
+        echo "date=$(date "+%Y%m%d%H%M")" >>$GITHUB_ENV
+        LATEST=$(curl -s https://downloads.openwrt.org/releases/ | grep -oP 'href="\K[0-9]+\.[0-9]+(\.[0-9]+)?.*(?=/")' | sort -V | tail -n1)
+        echo "ver=$LATEST" >>$GITHUB_ENV
+        echo "tag=v$LATEST" >>$GITHUB_ENV
