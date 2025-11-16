@@ -30,6 +30,7 @@ jobs:
       uses: ./.github/actions/builddir
 
     - name: Compile packages
+      working-directory: ./openwrt
       run : |
         make package/smartdns/compile
         make package/luci-app-smartdns/compile
