@@ -2,7 +2,6 @@ name: "Initialization environment"
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v5
     - name: Initialization environment
       env:
         DEBIAN_FRONTEND: noninteractive
