@@ -6,13 +6,7 @@ runs:
       run : |
         git clone https://github.com/openwrt/openwrt.git
         cd openwrt
-        TAG=$(git tag | sort | tail -1 | awk -F '-' '{print$1}')
-        git tag | grep $TAG$ || TAG=$(git tag | sort | tail -1)
-        echo "tag=$TAG" >> $GITHUB_ENV
-        echo "ver=${TAG:1}" >> $GITHUB_ENV
-
-        git checkout $TAG
-        # wget -O $(ls -d ./target/linux/x86/patches-*)/600-bnx2x-warpcore-8727-2g5.patch https://raw.githubusercontent.com/JAMESMTL/snippets/master/bnx2x/patches/bnx2x_warpcore_8727_2_5g_sgmii_txfault.patch
+        git checkout ${{env.tag}}
 
         # sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' ./feeds.conf.default
         sed -i 's|git.openwrt.org/openwrt/openwrt.git|github.com/openwrt/openwrt.git|' feeds.conf.default
