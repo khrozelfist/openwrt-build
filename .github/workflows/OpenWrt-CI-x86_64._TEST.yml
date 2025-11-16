@@ -14,7 +14,7 @@ jobs:
 #       read -p "pause"
 
     - name: Cleanup space
-      uses: ./.github/actions/clean
+      uses: ./.github/actions/cleanup
 
     - name: Declare Variable
       uses: ./.github/actions/variable
