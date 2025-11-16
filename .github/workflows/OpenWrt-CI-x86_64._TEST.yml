@@ -13,8 +13,8 @@ jobs:
 #     run : |
 #       read -p "pause"
 
-    - name: Initialization environment
-      uses: ./.github/actions/init
+    - name: Cleanup space
+      uses: ./.github/actions/clean
 
     - name: Declare Variable
       run : |
