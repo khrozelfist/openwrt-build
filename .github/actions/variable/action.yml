@@ -1,8 +1,8 @@
-name: "Prepare variable"
+name: "Declare variable"
 runs:
   using: "composite"
   steps:
-    - name: Prepare variable
+    - name: Declare variable
       shell: bash
       run : |
         echo "date=$(date "+%Y%m%d%H%M")" >>$GITHUB_ENV
