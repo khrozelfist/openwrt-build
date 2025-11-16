@@ -23,8 +23,8 @@ jobs:
         echo "ver=$LATEST" >>$GITHUB_ENV
         echo "tag=v$LATEST" >>$GITHUB_ENV
 
-    - name: Prepare Buildroot
-      uses: ./.github/actions/buildroot
+    - name: Prepare builddir
+      uses: ./.github/actions/builddir
 
     - name: Prepare Files
       uses: ./.github/actions/files
