@@ -1,0 +1,41 @@
+name: "Prepare artifact"
+runs:
+  using: "composite"
+  steps:
+    - name: Prepare artifact
+      shell: bash
+      working-directory: ./openwrt
+      run : |
+        mkdir -p ./artifact/buildinfo
+        mkdir -p ./artifact/package
+        mkdir -p ./artifact/firmware
+
+        find ./ -type f -regex '.*\.\(ipk\|apk\)$' > ./artifact/buildinfo/packages.path
+        cp ././config.raw ./artifact/buildinfo
+        cp -rf $(find ./bin/targets/ -type f \( -name '*.buildinfo' -o -name '*.manifest' \)) ./artifact/buildinfo/
+
+        # rm -rf $(find ./bin/targets/ -type d -name "packages")
+        cp -rf $(find ./ -type f -regex '.*\.\(ipk\|apk\)$') ./artifact/package/
+
+        cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
+        # rm -rf $(find ./artifact/firmware/ -type f -name "*.tar.gz")
+        rm -rf $(find ./artifact/firmware/ -type f -name "*.bin")
+        # rm -rf $(find ./artifact/firmware/ -type f -name "*.img*" | grep -v "combined-efi")
+
+    - name: Deliver buildinfo
+      uses: actions/upload-artifact@v4
+      with:
+        name: OpenWrt_buildinfo_${{env.tag}}_${{env.date}}
+        path: ./openwrt/artifact/buildinfo/
+
+    - name: Deliver package
+      uses: actions/upload-artifact@v4
+      with:
+        name: OpenWrt_package_${{env.tag}}_${{env.date}}
+        path: ./openwrt/artifact/package/
+
+    - name: Deliver firmware
+      uses: actions/upload-artifact@v4
+      with:
+        name: OpenWrt_firmware_${{env.tag}}_${{env.date}}
+        path: ./openwrt/artifact/firmware/
