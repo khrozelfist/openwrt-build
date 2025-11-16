@@ -12,8 +12,6 @@ jobs:
 #     run : |
 #       read -p "pause"
 
-    - uses: actions/checkout@v5
-
     - name: Initialization environment
       uses: ./.github/actions/Init.yml
 
