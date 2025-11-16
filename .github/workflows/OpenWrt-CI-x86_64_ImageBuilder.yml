@@ -1,0 +1,131 @@
+name: OpenWrt-CI-x86_64 (ImageBuilder)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_openwrt:
+    name: Build OpenWrt firmware
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+#   - name: Test
+#     run : |
+#       read -p "pause"
+
+    - name: Cleanup space
+      uses: ./.github/actions/clean
+
+    - name: Declare Variable
+      uses: ./.github/actions/variable
+
+    - name: Prepare SDK
+      run : |
+        SDK=$(curl -s https://downloads.openwrt.org/releases/$LATEST/targets/x86/64/ | grep -oP 'href="\Kopenwrt-sdk-'${{env.ver}}'[^"]*"' | tr -d '"')
+        wget https://downloads.openwrt.org/releases/${{env.ver}}/targets/x86/64/$SDK
+        mkdir -p openwrt
+        tar --zstd -xf openwrt-sdk-*.tar.zst -C openwrt --strip-components=1
+
+    - name: Prepare builddir
+      uses: ./.github/actions/builddir
+
+    - name: Compile packages
+      run : |
+        make package/smartdns/compile
+        make package/luci-app-smartdns/compile
+
+    - name: Build image
+      run : |
+        wget https://downloads.openwrt.org/releases/${{env.ver}}/targets/x86/64/openwrt-imagebuilder-${{env.ver}}-x86-64.Linux-x86_64.tar.zst
+        tar --zstd -xf openwrt-imagebuilder-*.tar.zst
+        cd openwrt-imagebuilder-*/
+
+        
+        cp -rf $(find ../openwrt/bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$') ./packages/
+
+        PRELIST=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/x86/64/openwrt-${{env.ver}}-x86-64.manifest | awk '{print$1}' | grep -Ev 'dnsmasq|package2')
+
+        MYLIST="
+        kmod-bnx2x
+        kmod-mt7921e
+        kmod-bnx2x
+        kmod-mt7921e
+        kmod-tcp-bbr
+        kmod-macvlan
+        kmod-fs-ext4
+        kmod-nft-tproxy
+        kmod-nft-netdev
+        bnx2x-firmware
+        libcap-bin
+        wpad-mbedtls
+        coreutils
+        coreutils-base64
+        coreutils-sha1sum
+        ca-certificates
+        dnsmasq
+        dnsmasq-full
+        ethtool-full
+        ip-full
+        nano
+        curl
+        openssh-sftp-server
+        irqbalance
+        tcpdump
+        iperf3
+        fdisk
+        parted
+        losetup
+        resize2fs
+        lsblk
+        blkid
+        block-mount
+        conntrack
+        bind-dig
+        drill
+        bash
+        pciutils
+        proxychains-ng
+        htop
+        hostapd-utils
+        uxc
+        sudo
+        python3-pip
+        xxd
+        cifsmount
+        screen
+        ncat-full
+        collectd-mod-thermal
+        collectd-mod-exec
+        collectd-mod-conntrack
+        collectd-mod-ipstatistics
+        collectd-mod-processes
+        collectd-mod-tcpconns
+        collectd-mod-uptime
+        collectd-mod-ping
+        collectd-mod-dns
+        xray-core
+        luci-proto-wireguard
+        luci-app-wol
+        luci-app-ddns
+        luci-app-mwan3
+        luci-app-samba4
+        luci-app-vnstat2
+        luci-app-statistics
+        luci-app-natmap
+        luci-app-upnp
+        luci-app-dockerman
+        luci-lib-docker
+        "
+
+        DELIST="
+        "
+
+        cp ./.config ../openwrt/config.raw
+        make image \
+          PACKAGES="$PRELIST $MYLIST" \
+          FILES="../openwrt/files" \
+          BIN_DIR="../openwrt/bin/targets" \
+          ROOTFS_PARTSIZE="1024"
+
+    - name: Prepare artifact
+      uses: ./.github/actions/artifact
