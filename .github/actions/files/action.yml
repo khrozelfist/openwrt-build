@@ -5,9 +5,10 @@ runs:
       working-directory: ./openwrt
       shell: bash
       run : |
-        # git checkout ${{env.tag}}
         sed -i '/DEFAULT:=n/d' ./feeds/packages/net/rp-pppoe/Makefile
         # sed -i 's/LOG info "Check/#LOG info "Check/' ./feeds/packages/net/mwan3/files/usr/sbin/mwan3track
+
+        # wget -O $(ls -d ./target/linux/x86/patches-*)/600-bnx2x-warpcore-8727-2g5.patch https://raw.githubusercontent.com/JAMESMTL/snippets/master/bnx2x/patches/bnx2x_warpcore_8727_2_5g_sgmii_txfault.patch
 
         mkdir -p ./files/etc/uci-defaults
         mkdir -p ./files/usr/bin
