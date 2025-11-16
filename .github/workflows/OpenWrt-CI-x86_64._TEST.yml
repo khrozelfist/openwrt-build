@@ -12,12 +12,12 @@ jobs:
 #     run : |
 #       read -p "pause"
 
+    - uses: actions/checkout@5
+
     - name: Initialization environment
-      uses: actions/checkout
       uses: ./.github/actions/Init.yml
 
     - name: Prepare Buildroot
-      uses: actions/checkout
       uses: ./.github/actions/Prepare.yml
 
     - name: Generate configuration file
