@@ -26,9 +26,6 @@ jobs:
     - name: Prepare builddir
       uses: ./.github/actions/builddir
 
-    - name: Prepare Files
-      uses: ./.github/actions/files
-
     - name: Generate configuration file
       working-directory: ./openwrt
       run : |
