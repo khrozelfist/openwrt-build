@@ -26,7 +26,7 @@ jobs:
     - name: Prepare builddir
       uses: ./.github/actions/builddir
 
-    - name: Generate configuration file
+    - name: Build firmware
       working-directory: ./openwrt
       run : |
         git checkout ${{env.tag}}
@@ -140,44 +140,10 @@ jobs:
         EOF
 
         make defconfig
-
-    - name: Build firmware
-      working-directory: ./openwrt
-      run : |
-        git checkout ${{env.tag}}
         cp ./.config ./config.raw
-        make -j$(nproc) || make -j1 V=s
+
+        # make -j$(nproc) || make -j1 V=s
+        make -j$(nproc) V=s
 
     - name: Prepare artifact
-      working-directory: ./openwrt
-      run : |
-        mkdir -p ./artifact/buildinfo
-        mkdir -p ./artifact/firmware
-        mkdir -p ./artifact/package
-        find ./ -type f -regex '.*\.\(ipk\|apk\)$' > ./artifact/buildinfo/packages.path
-        cp ././config.raw ./artifact/buildinfo
-        cp -rf $(find ./bin/targets/ -type f \( -name '*.buildinfo' -o -name '*.manifest' \)) ./artifact/buildinfo/
-        # rm -rf $(find ./bin/targets/ -type d -name "packages")
-        cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
-        # rm -rf $(find ./artifact/firmware/ -type f -name "*.tar.gz")
-        rm -rf $(find ./artifact/firmware/ -type f -name "*.bin")
-        rm -rf $(find ./artifact/firmware/ -type f -name "*.img*" | grep -v "combined-efi")
-        cp -rf $(find ./ -type f -regex '.*\.\(ipk\|apk\)$') ./artifact/package/
-
-    - name: Deliver buildinfo
-      uses: actions/upload-artifact@v4
-      with:
-        name: OpenWrt_buildinfo_${{env.tag}}_${{env.date}}
-        path: ./openwrt/artifact/buildinfo/
-
-    - name: Deliver firmware
-      uses: actions/upload-artifact@v4
-      with:
-        name: OpenWrt_firmware_${{env.tag}}_${{env.date}}
-        path: ./openwrt/artifact/firmware/
-
-    - name: Deliver package
-      uses: actions/upload-artifact@v4
-      with:
-        name: OpenWrt_package_${{env.tag}}_${{env.date}}
-        path: ./openwrt/artifact/package/
+      uses: ./.github/actions/artifact
