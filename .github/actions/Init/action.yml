@@ -3,11 +3,12 @@ runs:
   using: "composite"
   steps:
     - name: Initialization environment
+      shell: bash
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
         set +e
-        docker rmi `docker images -q`
+        docker rmi $(docker images -q)
         sudo rm -rf \
           /usr/share/dotnet \
           /usr/local/lib/android \
