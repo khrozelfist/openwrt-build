@@ -1,8 +1,8 @@
-name: "Prepare Buildroot"
+name: "Prepare builddir"
 runs:
   using: "composite"
   steps:
-    - name: Prepare Buildroot
+    - name: Prepare builddir
       shell: bash
       run : |
         git clone https://github.com/openwrt/openwrt.git
