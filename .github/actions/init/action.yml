@@ -2,7 +2,7 @@ name: "Initialization environment"
 runs:
   using: "composite"
   steps:
-      shell: bash
+    - shell: bash
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
