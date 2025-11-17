@@ -32,6 +32,8 @@ jobs:
     - name: Compile packages
       working-directory: ./openwrt
       run : |
+        make defconfig
+        cp ./.config ./config.raw
         make package/smartdns/compile
         make package/luci-app-smartdns/compile
 
