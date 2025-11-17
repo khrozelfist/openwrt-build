@@ -1,8 +1,8 @@
-name: "Cleanup space"
+name: "Initialization environment"
 runs:
   using: "composite"
   steps:
-    - name: Cleanup space
+    - name: Initialization environment
       shell: bash
       env:
         DEBIAN_FRONTEND: noninteractive
