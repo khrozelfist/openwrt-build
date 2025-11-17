@@ -16,9 +16,6 @@ jobs:
     - name: Initialize environment
       uses: ./.github/actions/init
 
-    - name: Declare Variable
-      uses: ./.github/actions/variable
-
     - name: Prepare builddir
       uses: ./.github/actions/builddir
 
