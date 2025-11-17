@@ -13,7 +13,7 @@ jobs:
 #     run : |
 #       read -p "pause"
 
-    - name: Initialization environment
+    - name: Initialize environment
       uses: ./.github/actions/init
 
     - name: Declare Variable
