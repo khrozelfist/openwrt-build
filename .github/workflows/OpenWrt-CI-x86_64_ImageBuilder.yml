@@ -16,9 +16,6 @@ jobs:
     - name: Initialize environment
       uses: ./.github/actions/init
 
-    - name: Declare Variable
-      uses: ./.github/actions/variable
-
     - name: Prepare SDK
       run : |
         SDK=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/x86/64/ | grep -oP 'href="\Kopenwrt-sdk-${{env.ver}}[^"]*"' | tr -d '"')
