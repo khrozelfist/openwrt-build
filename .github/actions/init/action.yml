@@ -1,8 +1,8 @@
-name: "Initialization environment"
+name: "Initialize environment"
 runs:
   using: "composite"
   steps:
-    - name: Initialization environment
+    - name: Initialize environment
       shell: bash
       env:
         DEBIAN_FRONTEND: noninteractive
