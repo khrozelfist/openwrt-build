@@ -15,6 +15,7 @@ runs:
         cp -rf $(find ./bin/targets/ -type f \( -name '*.buildinfo' -o -name '*.manifest' \)) ./artifact/buildinfo/
 
         cp -rf $(find ./bin/ -type f -regex '.*\.\(ipk\|apk\)$') ./artifact/package/
+        # cp -rf $(find ./bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$') ./artifact/package/
         rm -rf $(find ./bin/targets/ -type d -name "packages")
 
         cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
