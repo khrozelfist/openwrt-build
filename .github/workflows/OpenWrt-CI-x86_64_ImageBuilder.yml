@@ -34,7 +34,7 @@ jobs:
       run : |
         make defconfig
         cp ./.config ./config.raw
-        make package/smartdns/compile
+        make package/smartdns/compile V=sc
         make package/luci-app-smartdns/compile
 
     - name: Build image
