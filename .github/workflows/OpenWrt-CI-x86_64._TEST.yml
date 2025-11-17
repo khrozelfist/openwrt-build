@@ -138,5 +138,7 @@ jobs:
         # make -j$(nproc) || make -j1 V=s
         make -j$(nproc) V=s
 
+        rm -rf $(find ./bin/targets/ -type f -name "*.img*" | grep -v "combined-efi")
+
     - name: Prepare artifact
       uses: ./.github/actions/artifact
