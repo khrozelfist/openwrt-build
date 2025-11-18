@@ -42,10 +42,8 @@ jobs:
         make defconfig
         cp ./.config ./config.raw
 
-        sed -i 's/llvm.download-ci-llvm=true/llvm.download-ci-llvm=if-unchanged/' ./feeds/packages/lang/rust/Makefile
-
-        make package/smartdns/compile -j1 V=sc
-        make package/luci-app-smartdns/compile -j$(nproc) V=sc
+        # make package/smartdns/compile -j1 V=sc
+        make package/luci-app-smartdns/compile -j$(nproc)
 
     - name: Build image
       run : |
