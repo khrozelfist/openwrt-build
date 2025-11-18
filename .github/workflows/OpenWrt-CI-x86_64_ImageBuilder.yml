@@ -51,6 +51,7 @@ jobs:
         tar --zstd -xf openwrt-imagebuilder-*.tar.zst
         cd openwrt-imagebuilder-*/
 
+        mkdir -p ../openwrt/bin/packages/
         MYPKG=$(find ../openwrt/bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
         [ "$MYPKG" ] && cp -rf $MYPKG ./packages/
 
