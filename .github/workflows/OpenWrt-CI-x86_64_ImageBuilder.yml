@@ -51,7 +51,8 @@ jobs:
         tar --zstd -xf openwrt-imagebuilder-*.tar.zst
         cd openwrt-imagebuilder-*/
 
-        cp -rf $(find ../openwrt/bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$') ./packages/ || true
+        MYPKG=$(find ../openwrt/bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
+        [ "$MYPKG" ] && cp -rf $MYPKG ./packages/
 
         PRELIST=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/x86/64/openwrt-${{env.ver}}-x86-64.manifest | awk '{print$1}' | grep -Ev 'dnsmasq|package2')
 
