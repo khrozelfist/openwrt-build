@@ -42,7 +42,7 @@ jobs:
         make defconfig
         cp ./.config ./config.raw
 
-        make package/smartdns/compile -j$(nproc)
+        # make package/smartdns/compile -j$(nproc)
         # make package/luci-app-smartdns/compile -j$(nproc)
 
     - name: Build image
