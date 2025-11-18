@@ -74,7 +74,6 @@ jobs:
         coreutils-base64
         coreutils-sha1sum
         ca-certificates
-        dnsmasq
         dnsmasq-full
         ethtool-full
         ip-full
