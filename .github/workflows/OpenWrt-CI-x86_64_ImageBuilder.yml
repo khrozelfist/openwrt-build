@@ -16,31 +16,34 @@ jobs:
     - name: Initialize environment
       uses: ./.github/actions/init
 
-#   - name: Prepare SDK
-#     run : |
-#       SDK=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/x86/64/ | grep -oP 'href="\Kopenwrt-sdk-${{env.ver}}[^"]*"' | tr -d '"')
-#       wget -q https://downloads.openwrt.org/releases/${{env.ver}}/targets/x86/64/$SDK
-#       mkdir -p openwrt
-#       tar --zstd -xf openwrt-sdk-*.tar.zst -C openwrt --strip-components=1
+    - name: Prepare SDK
+      run : |
+        SDK=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/x86/64/ | grep -oP 'href="\Kopenwrt-sdk-${{env.ver}}[^"]*"' | tr -d '"')
+        wget -q https://downloads.openwrt.org/releases/${{env.ver}}/targets/x86/64/$SDK
+        mkdir -p openwrt
+        tar --zstd -xf openwrt-sdk-*.tar.zst -C openwrt --strip-components=1
 
     - name: Prepare builddir
       uses: ./.github/actions/builddir
 
-    - name: Generate configuration
-      working-directory: ./openwrt
-      run : |
-        git checkout ${{env.tag}}
-        rm -f ./.config*
-        curl -Ls https://downloads.openwrt.org/releases/${{env.ver}}/targets/x86/64/config.buildinfo | grep -e CONFIG_TARGET_ -e CONFIG_KERNEL_ -e CONFIG_PACKAGE_ -e CONFIG_VERSION_ >> ./.config
-        sed -i 's/CONFIG_TARGET_MULTI_PROFILE=y/CONFIG_TARGET_MULTI_PROFILE=n/' ./.config
-        sed -i 's/CONFIG_TARGET_PER_DEVICE_ROOTFS=y/CONFIG_TARGET_PER_DEVICE_ROOTFS=n/' ./.config
-        sed -i 's/CONFIG_TARGET_ALL_PROFILES=y/CONFIG_TARGET_ALL_PROFILES=n/' ./.config
+#   - name: Generate configuration
+#     working-directory: ./openwrt
+#     run : |
+#       git checkout ${{env.tag}}
+#       rm -f ./.config*
+#       curl -Ls https://downloads.openwrt.org/releases/${{env.ver}}/targets/x86/64/config.buildinfo | grep -e CONFIG_TARGET_ -e CONFIG_KERNEL_ -e CONFIG_PACKAGE_ -e CONFIG_VERSION_ >> ./.config
+#       sed -i 's/CONFIG_TARGET_MULTI_PROFILE=y/CONFIG_TARGET_MULTI_PROFILE=n/' ./.config
+#       sed -i 's/CONFIG_TARGET_PER_DEVICE_ROOTFS=y/CONFIG_TARGET_PER_DEVICE_ROOTFS=n/' ./.config
+#       sed -i 's/CONFIG_TARGET_ALL_PROFILES=y/CONFIG_TARGET_ALL_PROFILES=n/' ./.config
 
     - name: Compile packages
       working-directory: ./openwrt
       run : |
         make defconfig
         cp ./.config ./config.raw
+
+        sed -i 's/llvm.download-ci-llvm=true/llvm.download-ci-llvm=if-unchanged/' ./feeds/packages/lang/rust/Makefile
+
         make package/smartdns/compile -j1 V=sc
         make package/luci-app-smartdns/compile -j$(nproc) V=sc
 
