@@ -137,7 +137,7 @@ jobs:
           PACKAGES=""$PRELIST" "$MYLIST"" \
           FILES="../openwrt/files" \
           BIN_DIR="../openwrt/bin/targets" \
-          ROOTFS_PARTSIZE=1024
+          ROOTFS_PARTSIZE="1024"
 
     - name: Prepare artifact
       uses: ./.github/actions/artifact
