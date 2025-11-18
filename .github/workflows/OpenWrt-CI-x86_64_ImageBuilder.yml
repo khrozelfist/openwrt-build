@@ -134,7 +134,7 @@ jobs:
 
         cp ./.config ../openwrt/config.raw
         make image \
-          PACKAGES="$PRELIST $MYLIST" \
+          PACKAGES="$(echo "$PRELIST $MYLIST" | tr '\n' ' ')" \
           FILES="../openwrt/files" \
           BIN_DIR="../openwrt/bin/targets" \
           ROOTFS_PARTSIZE=1024
