@@ -36,32 +36,6 @@ jobs:
 #       sed -i 's/CONFIG_TARGET_PER_DEVICE_ROOTFS=y/CONFIG_TARGET_PER_DEVICE_ROOTFS=n/' ./.config
 #       sed -i 's/CONFIG_TARGET_ALL_PROFILES=y/CONFIG_TARGET_ALL_PROFILES=n/' ./.config
 
-    - name: Cache Buildroot
-      uses: actions/cache@v4
-      with:
-        path: |
-          ./openwrt/dl
-          ./openwrt/build_dir
-          ./openwrt/staging_dir
-          ./openwrt/bin/targets
-        key: ${{ runner.os }}-openwrt-${{ env.tag }}-cache
-        restore-keys: |
-          ${{ runner.os }}-openwrt-${{ env.tag }}-
-          ${{ runner.os }}-openwrt-
-
-    - name: Cache ccache
-      uses: actions/cache@v4
-      with:
-        path: ~/.ccache
-        key: ${{ runner.os }}-ccache
-        restore-keys: |
-          ${{ runner.os }}-ccache
-
-    - name: Enable ccache
-      run: |
-        echo 'export CC="ccache gcc"' >> $GITHUB_ENV
-        echo 'export CXX="ccache g++"' >> $GITHUB_ENV
-
     - name: Compile packages
       working-directory: ./openwrt
       run : |
