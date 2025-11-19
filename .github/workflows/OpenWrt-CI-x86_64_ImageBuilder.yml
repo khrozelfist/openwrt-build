@@ -23,8 +23,8 @@ jobs:
         mkdir -p openwrt
         tar --zstd -xf openwrt-sdk-*.tar.zst -C openwrt --strip-components=1
 
-    - name: Prepare builddir
-      uses: ./.github/actions/builddir
+    - name: Prepare Buildroot
+      uses: ./.github/actions/buildroot
 
 #   - name: Generate configuration
 #     working-directory: ./openwrt
@@ -36,7 +36,7 @@ jobs:
 #       sed -i 's/CONFIG_TARGET_PER_DEVICE_ROOTFS=y/CONFIG_TARGET_PER_DEVICE_ROOTFS=n/' ./.config
 #       sed -i 's/CONFIG_TARGET_ALL_PROFILES=y/CONFIG_TARGET_ALL_PROFILES=n/' ./.config
 
-    - name: Cache OpenWrt build directories
+    - name: Cache Buildroot (SDK)
       uses: actions/cache@v4
       with:
         path: |
@@ -71,13 +71,26 @@ jobs:
         # make package/smartdns/compile -j$(nproc)
         # make package/luci-app-smartdns/compile -j$(nproc)
 
-    - name: Build image
+    - name: Prepare ImageBuilder
       run : |
         wget -q https://downloads.openwrt.org/releases/${{env.ver}}/targets/x86/64/openwrt-imagebuilder-${{env.ver}}-x86-64.Linux-x86_64.tar.zst
         mkdir -p openwrt-imagebuilder
         tar --zstd -xf openwrt-imagebuilder-*.tar.zst -C openwrt-imagebuilder --strip-components=1
-        cd openwrt-imagebuilder/
 
+    - name: Cache ImageBuilder
+      uses: actions/cache@v4
+      with:
+        path: |
+          openwrt-imagebuilder/build_dir
+          openwrt-imagebuilder/tmp
+        key: ${{ runner.os }}-openwrt-imagebuilder-${{ env.ver }}-cache
+        restore-keys: |
+          ${{ runner.os }}-openwrt-imagebuilder-${{ env.ver }}-
+          ${{ runner.os }}-openwrt-imagebuilder-
+
+    - name: Build image
+      working-directory: ./openwrt-imagebuilder
+      run : |
         mkdir -p ../openwrt/bin/packages/
         MYPKG=$(find ../openwrt/bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
         [ "$MYPKG" ] && cp -rf $MYPKG ./packages/
