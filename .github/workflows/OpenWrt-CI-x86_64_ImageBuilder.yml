@@ -21,11 +21,24 @@ jobs:
       with:
         mode: sdk
 
+#   - name: Cache Buildroot
+#     uses: actions/cache@v4
+#     with:
+#       path: |
+#         ./openwrt/dl
+#         ./openwrt/build_dir
+#          ./openwrt/staging_dir
+#         ./openwrt/bin/targets
+#       key: ${{ runner.os }}-openwrt-sdk-${{ env.tag }}-cache
+#       restore-keys: |
+#         ${{ runner.os }}-openwrt-sdk-${{ env.tag }}-
+#         ${{ runner.os }}-openwrt-sdk-
+
     - name: Compile packages
       working-directory: ./openwrt
       run : |
         make defconfig
-        cp ./.config ./config.raw
+        cp ./.config ./config.sdk
 
         # make package/smartdns/compile -j$(nproc)
         # make package/luci-app-smartdns/compile -j$(nproc)
@@ -37,16 +50,16 @@ jobs:
         mkdir -p openwrt-imagebuilder
         tar --zstd -xf openwrt-imagebuilder-*.tar.zst -C openwrt-imagebuilder --strip-components=1
 
-    - name: Cache ImageBuilder
-      uses: actions/cache@v4
-      with:
-        path: |
-          openwrt-imagebuilder/build_dir
-          openwrt-imagebuilder/tmp
-        key: ${{ runner.os }}-openwrt-imagebuilder-${{ env.ver }}-cache
-        restore-keys: |
-          ${{ runner.os }}-openwrt-imagebuilder-${{ env.ver }}-
-          ${{ runner.os }}-openwrt-imagebuilder-
+#   - name: Cache ImageBuilder
+#     uses: actions/cache@v4
+#     with:
+#       path: |
+#         ./openwrt-imagebuilder/dl
+#         ./openwrt-imagebuilder/tmp
+#       key: ${{ runner.os }}-openwrt-imagebuilder-${{ env.ver }}-cache
+#       restore-keys: |
+#         ${{ runner.os }}-openwrt-imagebuilder-${{ env.ver }}-
+#         ${{ runner.os }}-openwrt-imagebuilder-
 
     - name: Build image
       working-directory: ./openwrt-imagebuilder
@@ -131,7 +144,7 @@ jobs:
         DELIST="
         "
 
-        cp ./.config ../openwrt/config.raw
+        cp ./.config ../openwrt/config.imb
         make image \
           PACKAGES="-dnsmasq $(echo "$PRELIST $MYLIST" | tr '\n' ' ' | tr -s ' ')" \
           FILES="../openwrt/files" \
