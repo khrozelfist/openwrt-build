@@ -72,7 +72,7 @@ runs:
       with:
         path: |
           ./openwrt/dl
-          ./openwrt/build_dir
+#         ./openwrt/build_dir
 #         ./openwrt/staging_dir
           ./openwrt/bin/targets
         key: ${{ runner.os }}-openwrt-${{ env.tag }}-cache
