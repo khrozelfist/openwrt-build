@@ -32,7 +32,8 @@ jobs:
 
     - name: Prepare ImageBuilder
       run : |
-        wget -q https://downloads.openwrt.org/releases/${{env.ver}}/targets/x86/64/openwrt-imagebuilder-${{env.ver}}-x86-64.Linux-x86_64.tar.zst
+        IMB=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/ | grep -oP 'href="\Kopenwrt-imagebuilder-${{env.ver}}[^"]*"' | tr -d '"')
+        wget -q https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/$IMB
         mkdir -p openwrt-imagebuilder
         tar --zstd -xf openwrt-imagebuilder-*.tar.zst -C openwrt-imagebuilder --strip-components=1
 
