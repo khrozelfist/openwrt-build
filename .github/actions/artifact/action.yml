@@ -17,7 +17,7 @@ runs:
 
         PKG=$(find ./bin/ -type f -regex '.*\.\(ipk\|apk\)$')
         # PKG=$(find ./bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
-        [ "PKG" ] && cp -rf $PKG ./artifact/package/
+        [ "$PKG" ] && cp -rf $PKG ./artifact/package/
         rm -rf $(find ./bin/targets/ -type d -name "packages")
 
         cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
