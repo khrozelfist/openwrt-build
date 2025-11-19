@@ -10,12 +10,14 @@ runs:
         mkdir -p ./artifact/package
         mkdir -p ./artifact/firmware
 
+        INFO=$(find ./bin/targets/ -type f \( -name '*.buildinfo' -o -name '*.manifest' \))
+        [ "$INFO" ] && cp -rf $INFO ./artifact/buildinfo/
         find ./ -type f -regex '.*\.\(ipk\|apk\)$' > ./artifact/buildinfo/packages.path
         cp ./config.raw ./artifact/buildinfo
-        cp -rf $(find ./bin/targets/ -type f \( -name '*.buildinfo' -o -name '*.manifest' \)) ./artifact/buildinfo/
 
-        cp -rf $(find ./bin/ -type f -regex '.*\.\(ipk\|apk\)$') ./artifact/package/
-        # cp -rf $(find ./bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$') ./artifact/package/
+        PKG=$(find ./bin/ -type f -regex '.*\.\(ipk\|apk\)$')
+        # PKG=$(find ./bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
+        [ "PKG" ] && cp -rf $PKG ./artifact/package/
         rm -rf $(find ./bin/targets/ -type d -name "packages")
 
         cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
