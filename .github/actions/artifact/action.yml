@@ -11,7 +11,7 @@ runs:
         mkdir -p ./artifact/firmware
 
         find ./ -type f -regex '.*\.\(ipk\|apk\)$' > ./artifact/buildinfo/packages.path
-        cp ././config.raw ./artifact/buildinfo
+        cp ./config.raw ./artifact/buildinfo
         cp -rf $(find ./bin/targets/ -type f \( -name '*.buildinfo' -o -name '*.manifest' \)) ./artifact/buildinfo/
 
         cp -rf $(find ./bin/ -type f -regex '.*\.\(ipk\|apk\)$') ./artifact/package/
