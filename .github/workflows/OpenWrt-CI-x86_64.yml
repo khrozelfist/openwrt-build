@@ -1,4 +1,4 @@
-name: OpenWrt-CI-x86_64 (Buildroot)
+name: OpenWrt-CI-x86_64
 
 on:
   workflow_dispatch:
