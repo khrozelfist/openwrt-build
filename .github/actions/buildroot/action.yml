@@ -57,16 +57,3 @@ runs:
         restore-keys: |
           ${{ runner.os }}-openwrt-${{ env.tag }}-
           ${{ runner.os }}-openwrt-
-
-    - name: Cache ccache
-      uses: actions/cache@v4
-      with:
-        path: ~/.ccache
-        key: ${{ runner.os }}-ccache
-        restore-keys: |
-          ${{ runner.os }}-ccache
-
-    - name: Enable ccache
-      run: |
-        echo 'export CC="ccache gcc"' >> $GITHUB_ENV
-        echo 'export CXX="ccache g++"' >> $GITHUB_ENV
