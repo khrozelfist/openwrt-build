@@ -1,16 +1,32 @@
 name: "Prepare Buildroot"
+inputs:
+  mode:
+    required: false
+    default: "full"
+  target:
+    required: false
+    default: "x86/64"
 runs:
   using: "composite"
   steps:
     - name: Prepare Buildroot
       shell: bash
       run : |
-        if [ -d openwrt ]; then
-          cd openwrt
-        else
+        echo "mode=${{ inputs.mode }}" >> $GITHUB_ENV
+        echo "target=${{ inputs.target }}" >> $GITHUB_ENV
+        
+        if [ ${{inputs.mode}} == full ]; then
           git clone https://github.com/openwrt/openwrt.git
           cd openwrt
           git checkout ${{env.tag}}
+        elif [ ${{inputs.mode}} == sdk ]; then
+          SDK=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{inputs.target}}/ | grep -oP 'href="\Kopenwrt-sdk-${{env.ver}}[^"]*"' | tr -d '"')
+          wget -q https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{inputs.target}}/$SDK
+          mkdir -p openwrt
+          tar --zstd -xf openwrt-sdk-*.tar.zst -C openwrt --strip-components=1
+          cd openwrt
+        else
+          echo Wrong mode >&2 && exit 1
         fi
 
         # sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' ./feeds.conf.default
@@ -40,10 +56,16 @@ runs:
         mkdir -p ./files/etc/uci-defaults
         mkdir -p ./files/usr/bin
         gostver=$(curl -s https://api.github.com/repos/go-gost/gost/releases/latest | jq -r '.tag_name' | sed 's/^v//')
-        curl -Lso /tmp/gost.tar.gz https://github.com/go-gost/gost/releases/download/v${gostver}/gost_${gostver}_linux_amd64v3.tar.gz
+        [ ${{inputs.target}} == x86/64 ] && curl -Lso /tmp/gost.tar.gz https://github.com/go-gost/gost/releases/download/v${gostver}/gost_${gostver}_linux_amd64v3.tar.gz
         tar xzf /tmp/gost.tar.gz -C /tmp
         mv /tmp/gost ./files/usr/bin/gost
         echo chmod +x /usr/bin/gost > ./files/etc/uci-defaults/99-gost
+
+        rm -f ./.config
+        curl -Ls https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{inputs.target}}/config.buildinfo | grep -e CONFIG_TARGET_ -e CONFIG_KERNEL_ -e CONFIG_PACKAGE_ -e CONFIG_VERSION_ >> ./.config
+        sed -i 's/CONFIG_TARGET_MULTI_PROFILE=y/CONFIG_TARGET_MULTI_PROFILE=n/' ./.config
+        sed -i 's/CONFIG_TARGET_PER_DEVICE_ROOTFS=y/CONFIG_TARGET_PER_DEVICE_ROOTFS=n/' ./.config
+        sed -i 's/CONFIG_TARGET_ALL_PROFILES=y/CONFIG_TARGET_ALL_PROFILES=n/' ./.config
 
     - name: Cache Buildroot
       uses: actions/cache@v4
