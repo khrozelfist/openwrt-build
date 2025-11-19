@@ -36,7 +36,7 @@ jobs:
 #       sed -i 's/CONFIG_TARGET_PER_DEVICE_ROOTFS=y/CONFIG_TARGET_PER_DEVICE_ROOTFS=n/' ./.config
 #       sed -i 's/CONFIG_TARGET_ALL_PROFILES=y/CONFIG_TARGET_ALL_PROFILES=n/' ./.config
 
-    - name: Cache Buildroot (SDK)
+    - name: Cache Buildroot
       uses: actions/cache@v4
       with:
         path: |
