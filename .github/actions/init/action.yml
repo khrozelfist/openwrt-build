@@ -28,13 +28,13 @@ runs:
         echo "ver=$LATEST" >>$GITHUB_ENV
         echo "tag=v$LATEST" >>$GITHUB_ENV
 
-    - name: Cache ccache
-      uses: actions/cache@v4
-      with:
-        path: ~/.ccache
-        key: ${{ runner.os }}-ccache
-        restore-keys: |
-          ${{ runner.os }}-ccache
+#   - name: Cache ccache
+#     uses: actions/cache@v4
+#     with:
+#       path: ~/.ccache
+#       key: ${{ runner.os }}-ccache
+#       restore-keys: |
+#         ${{ runner.os }}-ccache
 
 #   - name: Enable ccache
 #     run: |
