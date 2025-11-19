@@ -44,3 +44,29 @@ runs:
         tar xzf /tmp/gost.tar.gz -C /tmp
         mv /tmp/gost ./files/usr/bin/gost
         echo chmod +x /usr/bin/gost > ./files/etc/uci-defaults/99-gost
+
+    - name: Cache Buildroot
+      uses: actions/cache@v4
+      with:
+        path: |
+          ./openwrt/dl
+          ./openwrt/build_dir
+          ./openwrt/staging_dir
+          ./openwrt/bin/targets
+        key: ${{ runner.os }}-openwrt-${{ env.tag }}-cache
+        restore-keys: |
+          ${{ runner.os }}-openwrt-${{ env.tag }}-
+          ${{ runner.os }}-openwrt-
+
+    - name: Cache ccache
+      uses: actions/cache@v4
+      with:
+        path: ~/.ccache
+        key: ${{ runner.os }}-ccache
+        restore-keys: |
+          ${{ runner.os }}-ccache
+
+    - name: Enable ccache
+      run: |
+        echo 'export CC="ccache gcc"' >> $GITHUB_ENV
+        echo 'export CXX="ccache g++"' >> $GITHUB_ENV
