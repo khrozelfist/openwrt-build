@@ -1,8 +1,8 @@
-name: "Prepare builddir"
+name: "Prepare Buildroot"
 runs:
   using: "composite"
   steps:
-    - name: Prepare builddir
+    - name: Prepare Buildroot
       shell: bash
       run : |
         if [ -d openwrt ]; then
