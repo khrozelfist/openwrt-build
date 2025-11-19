@@ -16,8 +16,8 @@ jobs:
     - name: Initialize environment
       uses: ./.github/actions/init
 
-    - name: Prepare builddir
-      uses: ./.github/actions/builddir
+    - name: Prepare Buildroot
+      uses: ./.github/actions/buildroot
 
     - name: Build firmware
       working-directory: ./openwrt
