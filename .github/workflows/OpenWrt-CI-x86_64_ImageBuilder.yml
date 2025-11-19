@@ -150,6 +150,7 @@ jobs:
           FILES="../openwrt/files" \
           BIN_DIR="../openwrt/bin/targets" \
           ROOTFS_PARTSIZE="1024"
+        find ../ -type f -name "*.img*" >>./openwrt/bin/targets/output
 
     - name: Prepare artifact
       uses: ./.github/actions/artifact
