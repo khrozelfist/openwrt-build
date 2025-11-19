@@ -133,7 +133,7 @@ jobs:
 
         cp ./.config ../openwrt/config.raw
         make image \
-          PACKAGES="$(echo "$PRELIST $MYLIST" | tr '\n' ' ' | tr -s ' ')" \
+          PACKAGES="-dnsmasq $(echo "$PRELIST $MYLIST" | tr '\n' ' ' | tr -s ' ')" \
           FILES="../openwrt/files" \
           BIN_DIR="../openwrt/bin/targets" \
           ROOTFS_PARTSIZE="1024"
