@@ -128,7 +128,7 @@ jobs:
         make defconfig
         cp ./.config ./config.raw
 
-        make targetclean
+        # make targetclean
         # make -j$(nproc) || make -j1 V=s
         make -j$(nproc) V=s
 
