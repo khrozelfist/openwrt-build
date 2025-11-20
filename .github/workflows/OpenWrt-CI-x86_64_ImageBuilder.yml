@@ -25,7 +25,7 @@ jobs:
       working-directory: ./openwrt
       run : |
         make defconfig
-        cp ./.config ./config.sdk
+        cp ./.config ../artifact/buildinfo/config.sdk
 
         # make package/smartdns/compile -j$(nproc)
         # make package/luci-app-smartdns/compile -j$(nproc)
@@ -120,15 +120,14 @@ jobs:
         DELIST="
         "
 
-        cp ./.config ../openwrt/config.imb
+        cp ./.config ../artifact/buildinfo/config.imb
         make image \
           PACKAGES="-dnsmasq $(echo "$PRELIST $MYLIST" | tr '\n' ' ' | tr -s ' ')" \
           FILES="$GITHUB_WORKSPACE/openwrt/files" \
           BIN_DIR="$GITHUB_WORKSPACE/openwrt/bin/targets" \
           ROOTFS_PARTSIZE="1024"
 
-        mkdir -p ../openwrt/bin/targets
-        find ../ -type f -name "*.img*" >>../openwrt/bin/targets/targets.output
+        cp *ext4-combined-efi* ../artifact/firmware/
 
-    - name: Prepare artifact
+    - name: Deliver artifact
       uses: ./.github/actions/artifact
