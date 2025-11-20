@@ -128,7 +128,7 @@ jobs:
           ROOTFS_PARTSIZE="1024"
 
         mkdir -p ../openwrt/bin/targets
-        find ../ -type f -name "*.img*" >>../openwrt/bin/targets/output
+        find ../ -type f -name "*.img*" >>../openwrt/bin/targets/targets.output
 
     - name: Prepare artifact
       uses: ./.github/actions/artifact
