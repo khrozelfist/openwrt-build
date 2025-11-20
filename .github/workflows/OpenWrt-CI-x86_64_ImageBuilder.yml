@@ -21,6 +21,9 @@ jobs:
       with:
         mode: sdk
 
+    - name: Custom x86-64
+      uses: ./.github/actions/custom/x86-64
+
     - name: Compile packages
       working-directory: ./openwrt
       run : |
