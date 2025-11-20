@@ -21,19 +21,6 @@ jobs:
       with:
         mode: sdk
 
-#   - name: Cache Buildroot
-#     uses: actions/cache@v4
-#     with:
-#       path: |
-#         ./openwrt/dl
-#         ./openwrt/build_dir
-#          ./openwrt/staging_dir
-#         ./openwrt/bin/targets
-#       key: ${{ runner.os }}-openwrt-sdk-${{ env.tag }}-cache
-#       restore-keys: |
-#         ${{ runner.os }}-openwrt-sdk-${{ env.tag }}-
-#         ${{ runner.os }}-openwrt-sdk-
-
     - name: Compile packages
       working-directory: ./openwrt
       run : |
@@ -49,17 +36,6 @@ jobs:
         wget -q https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/$IMB
         mkdir -p openwrt-imagebuilder
         tar --zstd -xf openwrt-imagebuilder-*.tar.zst -C openwrt-imagebuilder --strip-components=1
-
-#   - name: Cache ImageBuilder
-#     uses: actions/cache@v4
-#     with:
-#       path: |
-#         ./openwrt-imagebuilder/dl
-#         ./openwrt-imagebuilder/tmp
-#       key: ${{ runner.os }}-openwrt-imagebuilder-${{ env.ver }}-cache
-#       restore-keys: |
-#         ${{ runner.os }}-openwrt-imagebuilder-${{ env.ver }}-
-#         ${{ runner.os }}-openwrt-imagebuilder-
 
     - name: Build image
       working-directory: ./openwrt-imagebuilder
