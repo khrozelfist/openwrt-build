@@ -14,8 +14,8 @@ runs:
       run : |
         echo "mode=${{inputs.mode}}" >> $GITHUB_ENV
         echo "target=${{inputs.target}}" >> $GITHUB_ENV
-        echo "board=$(echo ${{inputs.target}} | awk -F / '{print$1}'" >> $GITHUB_ENV
-        echo "subtarget=$(echo ${{inputs.target}} | awk -F / '{print$2}'" >> $GITHUB_ENV
+        echo "board=$(echo ${{inputs.target}} | awk -F / '{print$1}')" >> $GITHUB_ENV
+        echo "subtarget=$(echo ${{inputs.target}} | awk -F / '{print$2}')" >> $GITHUB_ENV
         
         
         if [ ${{inputs.mode}} == full ]; then
