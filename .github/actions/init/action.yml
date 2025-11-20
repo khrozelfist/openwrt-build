@@ -27,16 +27,3 @@ runs:
         LATEST=$(curl -s https://downloads.openwrt.org/releases/ | grep -oP 'href="\K[0-9]+\.[0-9]+(\.[0-9]+)?.*(?=/")' | sort -V | tail -n1)
         echo "ver=$LATEST" >>$GITHUB_ENV
         echo "tag=v$LATEST" >>$GITHUB_ENV
-
-#   - name: Cache ccache
-#     uses: actions/cache@v4
-#     with:
-#       path: ~/.ccache
-#       key: ${{ runner.os }}-ccache
-#       restore-keys: |
-#         ${{ runner.os }}-ccache
-
-#   - name: Enable ccache
-#     run: |
-#       echo 'export CC="ccache gcc"' >> $GITHUB_ENV
-#       echo 'export CXX="ccache g++"' >> $GITHUB_ENV
