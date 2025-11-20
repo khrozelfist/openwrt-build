@@ -13,7 +13,7 @@ runs:
         INFO=$(find ./bin/targets/ -type f \( -name '*.buildinfo' -o -name '*.manifest' \))
         [ "$INFO" ] && cp -rf $INFO ./artifact/buildinfo/
         find ./ -type f -regex '.*\.\(ipk\|apk\)$' > ./artifact/buildinfo/packages.path
-        cp ./config.raw ./artifact/buildinfo
+        cp ./config.* ./artifact/buildinfo
 
         PKG=$(find ./bin/ -type f -regex '.*\.\(ipk\|apk\)$')
         # PKG=$(find ./bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
