@@ -123,8 +123,8 @@ jobs:
         cp ./.config ../openwrt/config.imb
         make image \
           PACKAGES="-dnsmasq $(echo "$PRELIST $MYLIST" | tr '\n' ' ' | tr -s ' ')" \
-          FILES="../openwrt/files" \
-          BIN_DIR="../openwrt/bin/targets" \
+          FILES="${{github.workspace}}/openwrt/files" \
+          BIN_DIR="${{github.workspace}}/openwrt/bin/targets" \
           ROOTFS_PARTSIZE="1024"
 
         mkdir -p ../openwrt/bin/targets
