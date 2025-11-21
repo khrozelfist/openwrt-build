@@ -9,7 +9,7 @@ runs:
         INFO=$(find ./openwrt/bin/targets/ -type f ! -size +16M)
         [ "$INFO" ] && cp -rf $INFO ./artifact/buildinfo/
         find ./openwrt/bin/targets/ -path "*/packages" -prune -o -printf "%p %s\n" >./artifact/buildinfo/targets.output
-        find ./openwrt/ -type f -regex '.*\.\(ipk\|apk\)$' >./artifact/buildinfo/packages.output
+        find ./openwrt/ -type f -regex '.*\.\(ipk\|apk\)$' >./artifact/buildinfo/packages.${{env.mode}}
 
         PKG=$(find ./openwrt/bin/ -type f -regex '.*\.\(ipk\|apk\)$')
         # PKG=$(find ./openwrt/bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
