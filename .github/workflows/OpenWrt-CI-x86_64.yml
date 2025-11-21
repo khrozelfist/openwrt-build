@@ -19,6 +19,9 @@ jobs:
     - name: Prepare Buildroot
       uses: ./.github/actions/buildroot
 
+    - name: Custom x86-64
+      uses: ./.github/actions/custom/x86-64
+
     - name: Build firmware
       working-directory: ./openwrt
       run : |
@@ -126,13 +129,14 @@ jobs:
         EOF
 
         make defconfig
-        cp ./.config ./config.raw
+        cp ./.config ../artifact/buildinfo/config.raw
 
         # make targetclean
         # make -j$(nproc) || make -j1 V=s
         make -j$(nproc) V=s
 
-        rm -rf $(find ./bin/targets/ -type f -name "*.img*" | grep -v "combined-efi")
+        # rm -rf $(find ./bin/targets/ -type f -name "*.img*" | grep -v "combined-efi")
+        cp ./bin/targets/*ext4-combined-efi* ../artifact/firmware/
 
     - name: Prepare artifact
       uses: ./.github/actions/artifact
