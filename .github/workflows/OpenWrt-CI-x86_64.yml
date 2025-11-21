@@ -136,7 +136,7 @@ jobs:
         make -j$(nproc) V=s
 
         # rm -rf $(find ./bin/targets/ -type f -name "*.img*" | grep -v "combined-efi")
-        cp ./bin/targets/*ext4-combined-efi* ../artifact/firmware/
+        cp ./bin/targets/${{env.board}}/${{env.subtarget}}/*ext4-combined-efi* ../artifact/firmware/
 
     - name: Prepare artifact
       uses: ./.github/actions/artifact
