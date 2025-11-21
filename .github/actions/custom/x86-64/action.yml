@@ -1,8 +1,8 @@
-name: "Custom x86-64"
+name: "Customize x86-64"
 runs:
   using: "composite"
   steps:
-    - name: Custom x86-64
+    - name: Customize x86-64
       working-directory: ./openwrt
       shell: bash
       run: |
