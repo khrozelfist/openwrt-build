@@ -19,7 +19,7 @@ jobs:
     - name: Prepare Buildroot
       uses: ./.github/actions/buildroot
 
-    - name: Custom x86-64
+    - name: Customize
       uses: ./.github/actions/custom/x86-64
 
     - name: Build firmware
