@@ -132,10 +132,6 @@ jobs:
         luci-lib-docker
         "
 
-        DELIST="
-        dnsmasq
-        "
-
         cp ./.config ../artifact/buildinfo/config.imb
         make image \
           PACKAGES="-dnsmasq $(echo "$PRELIST $MYLIST" | tr '\n' ' ' | tr -s ' ')" \
