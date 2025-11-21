@@ -5,6 +5,8 @@ runs:
     - name: Prepare artifact
       shell: bash
       run : |
+        mkdir -p ./openwrt/bin/targets/
+
         # INFO=$(find ./openwrt/bin/targets/ -type f \( -name '*.buildinfo' -o -name '*.manifest' \))
         INFO=$(find ./openwrt/bin/targets/ -type f ! -size +16M)
         [ "$INFO" ] && cp -rf $INFO ./artifact/buildinfo/
