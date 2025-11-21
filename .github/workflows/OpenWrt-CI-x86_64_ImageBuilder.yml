@@ -127,10 +127,9 @@ jobs:
         make image \
           PACKAGES="-dnsmasq $(echo "$PRELIST $MYLIST" | tr '\n' ' ' | tr -s ' ')" \
           FILES="$GITHUB_WORKSPACE/openwrt/files" \
-          BIN_DIR="$GITHUB_WORKSPACE/openwrt/bin/targets" \
           ROOTFS_PARTSIZE="1024"
 
-        cp *ext4-combined-efi* ../artifact/firmware/
+        cp ./bin/targets/*ext4-combined-efi* ../artifact/firmware/
 
     - name: Deliver artifact
       uses: ./.github/actions/artifact
