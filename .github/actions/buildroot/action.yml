@@ -22,8 +22,8 @@ runs:
           cd openwrt
           git checkout ${{env.tag}}
         elif [ ${{inputs.mode}} == sdk ]; then
-          SDK=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{inputs.target}}/ | grep -oP 'href="\Kopenwrt-sdk-${{env.ver}}[^"]*"' | tr -d '"')
-          wget -q https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{inputs.target}}/$SDK
+          SDK_FILE=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{inputs.target}}/ | grep -oP 'href="\Kopenwrt-sdk-${{env.ver}}[^"]*"' | tr -d '"')
+          wget -q https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{inputs.target}}/$SDK_FILE
           mkdir -p openwrt
           tar --zstd -xf openwrt-sdk-*.tar.zst -C openwrt --strip-components=1
           cd openwrt
