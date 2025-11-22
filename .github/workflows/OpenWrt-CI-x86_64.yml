@@ -129,7 +129,7 @@ jobs:
         EOF
 
         make defconfig
-        cp ./.config ../artifact/buildinfo/config.raw
+        cp ./.config ../artifact/buildinfo/config.full
 
         # make targetclean
         # make -j$(nproc) || make -j1 V=s
