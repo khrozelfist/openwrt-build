@@ -8,15 +8,13 @@ runs:
         mkdir -p ./openwrt/bin/targets
 
         # INFO=$(find ./openwrt/bin/targets/ -type f \( -name '*.buildinfo' -o -name '*.manifest' \))
-        INFO=$(find ./openwrt/bin/targets/ -type f ! -size +16M)
+        INFO=$(find ./openwrt/bin/targets/ -type f ! -size +5M ! -path "*/packages*")
         [ "$INFO" ] && cp -rf $INFO ./artifact/buildinfo/
         find ./openwrt/bin/targets/ -path "*/packages" -prune -o -printf "%p %s\n" >./artifact/buildinfo/targets.output
         find ./openwrt/bin/ -type f -regex '.*\.\(ipk\|apk\)$' >./artifact/buildinfo/packages.${{env.mode}}
-
-        [ -s ./artifact/buildinfo/packages.${{env.mode}} ] && cp -rf $(cat ./artifact/buildinfo/packages.${{env.mode}}) ./artifact/package/
-        # PKG=$(find ./openwrt/bin/ -type f -regex '.*\.\(ipk\|apk\)$')
-        # PKG=$(find ./openwrt/bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
-        # [ "$PKG" ] && cp -rf $PKG ./artifact/package/
+        
+        PKG=$(find ./openwrt/bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
+        [ "$PKG" ] && cp -rf $PKG ./artifact/package/
         # rm -rf $(find ./openwrt/bin/targets/ -type d -name "packages")
 
         # cp -rf $(find ./openwrt/bin/targets/ -type f) ./artifact/firmware/
