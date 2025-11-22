@@ -35,8 +35,8 @@ jobs:
 
     - name: Prepare ImageBuilder
       run : |
-        IMB=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/ | grep -oP 'href="\Kopenwrt-imagebuilder-${{env.ver}}[^"]*"' | tr -d '"')
-        wget -q https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/$IMB
+        IB_FILE=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/ | grep -oP 'href="\Kopenwrt-imagebuilder-${{env.ver}}[^"]*"' | tr -d '"')
+        wget -q https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/$IB_FILE
         mkdir -p openwrt-imagebuilder
         tar --zstd -xf openwrt-imagebuilder-*.tar.zst -C openwrt-imagebuilder --strip-components=1
 
@@ -132,7 +132,7 @@ jobs:
         luci-app-nlbwmon
         "
 
-        cp ./.config ../artifact/buildinfo/config.imb
+        cp ./.config ../artifact/buildinfo/config.ib
         make image -j$(nproc) V=s \
           PACKAGES="$(echo "$PRELIST $MYLIST" | tr '\n' ' ' | tr -s ' ')" \
           FILES="$GITHUB_WORKSPACE/openwrt/files" \
