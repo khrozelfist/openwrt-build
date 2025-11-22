@@ -7,7 +7,7 @@ runs:
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
-        set +e
+        # set +e
         docker rmi $(docker images -q)
         sudo rm -rf \
           /usr/share/dotnet \
