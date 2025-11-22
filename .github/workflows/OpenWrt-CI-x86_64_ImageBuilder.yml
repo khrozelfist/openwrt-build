@@ -133,7 +133,7 @@ jobs:
         "
 
         cp ./.config ../artifact/buildinfo/config.imb
-        make image \
+        make image -j$(nproc) V=s \
           PACKAGES="$(echo "$PRELIST $MYLIST" | tr '\n' ' ' | tr -s ' ')" \
           FILES="$GITHUB_WORKSPACE/openwrt/files" \
           ROOTFS_PARTSIZE="1024"
