@@ -13,13 +13,12 @@ runs:
         find ./$MAIN/bin/targets/ -path "*/packages" -prune -o -type f -printf "%p %s\n" >./artifact/buildinfo/targets.output
         find ./$MAIN/bin/ -type f -regex '.*\.\(ipk\|apk\)$' >./artifact/buildinfo/packages.${{env.mode}}
 
-        if [ -d ./openwrt/bin/packages ]; then
-          PKG=$(find ./openwrt/bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
-          echo $PKG >>./artifact/buildinfo/packages.tmp
-          echo "[ "$PKG" ] && cp -rf $PKG ./artifact/package/" >>./artifact/buildinfo/packages.tmp
-          [ "$PKG" ] && cp -rf $PKG ./artifact/package/
-          # rm -rf $(find ./$MAIN/bin/targets/ -type d -name "packages")
-        fi
+        mkdir ./openwrt/bin/packages
+        PKG=$(find ./openwrt/bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
+        echo $PKG >>./artifact/buildinfo/packages.tmp
+        echo "[ "$PKG" ] && cp -rf $PKG ./artifact/package/" >>./artifact/buildinfo/packages.tmp
+        # [ "$PKG" ] && cp -rf $PKG ./artifact/package/
+        # rm -rf $(find ./$MAIN/bin/targets/ -type d -name "packages")
 
         # cp -rf $(find ./$MAIN/bin/targets/ -type f) ./artifact/firmware/
         # rm -rf $(find ./artifact/firmware/ -type f -name "*.bin")
