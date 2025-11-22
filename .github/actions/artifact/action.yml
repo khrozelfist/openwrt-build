@@ -5,22 +5,21 @@ runs:
     - name: Prepare artifact
       shell: bash
       run : |
-        mkdir -p ./openwrt/bin/targets
-        mkdir -p ./openwrt/bin/packages/
+        [ -f ./artifact/buildinfo/config.ib ] && MAIN=openwrt-imagebuilder
+        [ -f ./artifact/buildinfo/config.ib ] || MAIN=openwrt
 
-        # INFO=$(find ./openwrt/bin/targets/ -type f \( -name '*.buildinfo' -o -name '*.manifest' \))
-        INFO=$(find ./openwrt/bin/targets/ -type f ! -size +5M ! -path "*/packages*")
+        INFO=$(find ./$MAIN/bin/targets/ -type f ! -size +5M ! -path "*/packages*")
         [ "$INFO" ] && cp -rf $INFO ./artifact/buildinfo/
-        find ./openwrt/bin/targets/ -path "*/packages" -prune -o -printf "%p %s\n" >./artifact/buildinfo/targets.output
-        find ./openwrt/bin/ -type f -regex '.*\.\(ipk\|apk\)$' >./artifact/buildinfo/packages.${{env.mode}}
+        find ./$MAIN/bin/targets/ -path "*/packages" -prune -o -type f -printf "%p %s\n" >./artifact/buildinfo/targets.output
+        find ./$MAIN/bin/ -type f -regex '.*\.\(ipk\|apk\)$' >./artifact/buildinfo/packages.${{env.mode}}
 
-        PKG=$(find ./openwrt/bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
+        PKG=$(find ./$MAIN/bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
         echo $PKG >>./artifact/buildinfo/packages.tmp
         echo "[ "$PKG" ] && cp -rf $PKG ./artifact/package/" >>./artifact/buildinfo/packages.tmp
-        # [ "$PKG" ] && cp -rf $PKG ./artifact/package/
-        # rm -rf $(find ./openwrt/bin/targets/ -type d -name "packages")
+        [ "$PKG" ] && cp -rf $PKG ./artifact/package/
+        # rm -rf $(find ./$MAIN/bin/targets/ -type d -name "packages")
 
-        # cp -rf $(find ./openwrt/bin/targets/ -type f) ./artifact/firmware/
+        # cp -rf $(find ./$MAIN/bin/targets/ -type f) ./artifact/firmware/
         # rm -rf $(find ./artifact/firmware/ -type f -name "*.bin")
         # rm -rf $(find ./artifact/firmware/ -type f -name "*.tar.gz")
         # rm -rf $(find ./artifact/firmware/ -type f -name "*.img*" | grep -v "combined-efi")
