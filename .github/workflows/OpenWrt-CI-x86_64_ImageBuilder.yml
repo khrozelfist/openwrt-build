@@ -30,9 +30,11 @@ jobs:
         make defconfig
         cp ./.config ../artifact/buildinfo/config.${{env.mode}}
 
-        # make package/smartdns/compile -j$(nproc)
-        # make package/luci-app-smartdns/compile -j$(nproc)
-        make package/smartdns/compile -j1 V=s
+        make tools/install
+        make toolchain/install
+        make package/smartdns/compile -j$(nproc)
+        make package/luci-app-smartdns/compile -j$(nproc)
+        # make package/smartdns/compile -j1 V=s
 
     - name: Prepare ImageBuilder
       run : |
