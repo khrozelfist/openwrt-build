@@ -13,7 +13,7 @@ runs:
         find ./$MAIN/bin/targets/ -path "*/packages" -prune -o -type f -printf "%p %s\n" >./artifact/buildinfo/targets.output
         find ./$MAIN/bin/ -type f -regex '.*\.\(ipk\|apk\)$' >./artifact/buildinfo/packages.${{env.mode}}
 
-        mkdir ./openwrt/bin/packages
+        mkdir -p ./openwrt/bin/packages
         PKG=$(find ./openwrt/bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$' 2>&1)
         echo $PKG >>./artifact/buildinfo/packages.tmp
         echo "[ "$PKG" ] && cp -rf $PKG ./artifact/package/" >>./artifact/buildinfo/packages.tmp
