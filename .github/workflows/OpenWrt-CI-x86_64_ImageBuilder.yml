@@ -45,7 +45,7 @@ jobs:
       run : |
         mkdir -p ../openwrt/bin/packages/
         MYPKG=$(find ../openwrt/bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
-        [ "$MYPKG" ] && cp -rf $MYPKG ./packages/
+        [ "$MYPKG" ] && cp -rf "$MYPKG" ./packages/
 
         # PRELIST=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/openwrt-${{env.ver}}-${{env.board}}-${{env.subtarget}}.manifest | awk '{print$1}' | grep -Ev 'dnsmasq|package2')
         PRELIST=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/openwrt-${{env.ver}}-${{env.board}}-${{env.subtarget}}.manifest | awk '{print$1}')
@@ -133,10 +133,11 @@ jobs:
         "
 
         cp ./.config ../artifact/buildinfo/config.ib
-        make image -j$(nproc) V=s \
-          PACKAGES="$(echo "$PRELIST $MYLIST" | tr '\n' ' ' | tr -s ' ')" \
-          FILES="$GITHUB_WORKSPACE/openwrt/files" \
-          ROOTFS_PARTSIZE="1024"
+
+        export PACKAGES=$(echo $PRELIST $MYLIST)
+        export FILES=$GITHUB_WORKSPACE/openwrt/files
+        export ROOTFS_PARTSIZE=1024
+        make image -j$(nproc) V=s 
 
         cp ./bin/targets/${{env.board}}/${{env.subtarget}}/*ext4-combined-efi* ../artifact/firmware/
 
