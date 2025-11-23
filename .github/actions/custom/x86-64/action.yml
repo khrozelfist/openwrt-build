@@ -6,6 +6,19 @@ runs:
       working-directory: ./openwrt
       shell: bash
       run: |
+        cat >> ./.config <<EOF
+        # CONFIG_VHDX_IMAGES=y
+        # CONFIG_GRUB_EFI_IMAGES=y
+        # CONFIG_TARGET_IMAGES_GZIP=n
+        CONFIG_TARGET_ROOTFS_EXT4FS=y
+        CONFIG_TARGET_ROOTFS_TARGZ=n
+        CONFIG_TARGET_ROOTFS_SQUASHFS=n
+        # CONFIG_TARGET_ROOTFS_PARTSIZE=1024
+        # CONFIG_TARGET_KERNEL_PARTSIZE=16
+        # CONFIG_TARGET_EXT4_BLOCKSIZE_4K=y
+        # CONFIG_TARGET_EXT4_BLOCKSIZE=4096
+        EOF
+
         mkdir -p ./files/etc/uci-defaults
         mkdir -p ./files/usr/bin
         gostver=$(curl -s https://api.github.com/repos/go-gost/gost/releases/latest | jq -r '.tag_name' | sed 's/^v//')
