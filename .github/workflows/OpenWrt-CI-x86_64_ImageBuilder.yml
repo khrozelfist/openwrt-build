@@ -18,8 +18,8 @@ jobs:
 
     - name: Prepare Buildroot
       uses: ./.github/actions/buildroot
-      with:
-        mode: sdk
+#     with:
+#       mode: sdk
 
     - name: Customize
       uses: ./.github/actions/custom/x86-64
@@ -30,9 +30,8 @@ jobs:
         make defconfig
         cp ./.config ../artifact/buildinfo/config.${{env.mode}}
 
-        make package/smartdns/compile -j1 V=sc
-        # make package/smartdns/compile -j$(nproc)
-        # make package/luci-app-smartdns/compile -j$(nproc)
+        make package/smartdns/compile -j$(nproc)
+        make package/luci-app-smartdns/compile -j$(nproc)
 
     - name: Prepare ImageBuilder
       run : |
