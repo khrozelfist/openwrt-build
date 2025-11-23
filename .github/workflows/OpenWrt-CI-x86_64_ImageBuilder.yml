@@ -45,6 +45,10 @@ jobs:
     - name: Build image
       working-directory: ./openwrt-imagebuilder
       run : |
+        sed -i 's/CONFIG_TARGET_ROOTFS_TARGZ=y/CONFIG_TARGET_ROOTFS_TARGZ=n/' ./.config
+        sed -i 's/CONFIG_TARGET_ROOTFS_SQUASHFS=y/CONFIG_TARGET_ROOTFS_SQUASHFS=n/' ./.config
+        cp ./.config ../artifact/buildinfo/config.ib
+
         mkdir -p ../openwrt/bin/packages/
         MYPKG=$(find ../openwrt/bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
         [ "$MYPKG" ] && cp -rf $MYPKG ./packages/
@@ -132,10 +136,6 @@ jobs:
         luci-app-dawn
         luci-app-nlbwmon
         "
-
-        sed -i 's/CONFIG_TARGET_ROOTFS_TARGZ=y/CONFIG_TARGET_ROOTFS_TARGZ=n/' ./.config
-        sed -i 's/CONFIG_TARGET_ROOTFS_SQUASHFS=y/CONFIG_TARGET_ROOTFS_SQUASHFS=n/' ./.config
-        cp ./.config ../artifact/buildinfo/config.ib
 
         make image -j$(nproc) V=s \
           PACKAGES="$(echo $PRELIST $MYLIST)" \
