@@ -18,8 +18,8 @@ jobs:
 
     - name: Prepare Buildroot
       uses: ./.github/actions/buildroot
-#     with:
-#       mode: sdk
+      with:
+        mode: sdk
 
     - name: Customize
       uses: ./.github/actions/custom/x86-64
