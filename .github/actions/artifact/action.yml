@@ -14,9 +14,9 @@ runs:
         find ./$MAIN/bin/ -type f -regex '.*\.\(ipk\|apk\)$' >./artifact/buildinfo/packages.${{env.mode}}
 
         mkdir -p ./openwrt/bin/packages
-        mv -f ./openwrt/bin/packages ./artifact/package
-        # PKG=$(find ./openwrt/bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
-        # [ "$PKG" ] && cp -rf $PKG ./artifact/package/
+        # mv -f ./openwrt/bin/packages ./artifact/package
+        PKG=$(find ./openwrt/bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
+        [ "$PKG" ] && cp -rf $PKG ./artifact/package/
 
         # cp -rf $(find ./$MAIN/bin/targets/ -type f) ./artifact/firmware/
         # rm -rf $(find ./artifact/firmware/ -type f -name "*.bin")
