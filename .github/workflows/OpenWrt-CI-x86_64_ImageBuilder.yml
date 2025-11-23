@@ -28,7 +28,7 @@ jobs:
       working-directory: ./openwrt
       run : |
         make defconfig
-        cp ./.config ../artifact/buildinfo/config.sdk
+        cp ./.config ../artifact/buildinfo/config.${{env.mode}}
 
         make package/smartdns/compile -j1 V=sc
         # make package/smartdns/compile -j$(nproc)
