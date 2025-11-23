@@ -32,9 +32,8 @@ jobs:
 
         make tools/install
         make toolchain/install
-        make package/smartdns/compile -j$(nproc)
-        make package/luci-app-smartdns/compile -j$(nproc)
-        # make package/smartdns/compile -j1 V=s
+        make package/smartdns/{compile,install} -j$(nproc)
+        make package/luci-app-smartdns/{compile,install} -j$(nproc)
 
     - name: Prepare ImageBuilder
       run : |
