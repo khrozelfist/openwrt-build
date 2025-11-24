@@ -34,9 +34,9 @@ jobs:
         # [ ${{env.mode}} == sdk ] && sed -i 's/--set=llvm\.download-ci-llvm=true/--set=llvm.download-ci-llvm=false/' ./feeds/packages/lang/rust/Makefile
         [ ${{env.mode}} == full ] && make tools/install j$(nproc) && make toolchain/install j$(nproc)
 
-        make package/smartdns/compile -j1 V=sc
-        # make package/smartdns/{compile,install} -j$(nproc)
-        # make package/luci-app-smartdns/{compile,install} -j$(nproc)
+        # make package/smartdns/compile -j1 V=sc
+        make package/smartdns/compile,install -j$(nproc) V=s
+        make package/luci-app-smartdns/compile -j$(nproc) V=s
 
     - name: Prepare ImageBuilder
       run : |
