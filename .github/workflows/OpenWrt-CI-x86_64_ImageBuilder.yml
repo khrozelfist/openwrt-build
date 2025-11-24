@@ -11,7 +11,6 @@ jobs:
     - uses: actions/checkout@v5
     - name: Test
       run : |
-        env >&2
         read -p "pause"
 
     - name: Initialize environment
@@ -31,12 +30,12 @@ jobs:
         make defconfig
         cp ./.config ../artifact/buildinfo/config.${{env.mode}}
 
-        [ ${{env.mode}} == sdk ] && unset CI
+        [ ${{env.mode}} == sdk ] && sed -i 's/--build-dir/--ci false \\\n--build-dir/' ./feeds/packages/lang/rust/Makefile
+        # [ ${{env.mode}} == sdk ] && sed -i 's/--set=llvm\.download-ci-llvm=true/--set=llvm.download-ci-llvm=false/' ./feeds/packages/lang/rust/Makefile
         [ ${{env.mode}} == full ] && make tools/install j$(nproc) && make toolchain/install j$(nproc)
 
-        make package/smartdns/{compile,install} -j1 V=sc
-        # make package/smartdns/{compile,install} -j$(nproc)
-        # make package/luci-app-smartdns/{compile,install} -j$(nproc)
+        make package/smartdns/{compile,install} -j$(nproc)
+        make package/luci-app-smartdns/{compile,install} -j$(nproc)
 
     - name: Prepare ImageBuilder
       run : |
