@@ -12,7 +12,8 @@ runs:
         [ "$INFO" ] && cp -rf $INFO ./artifact/buildinfo/
         find ./$MAIN/bin/targets/ -path "*/packages" -prune -o -type f -printf "%p %s\n" >./artifact/buildinfo/targets.output
         find ./openwrt/bin/ -type f -regex '.*\.\(ipk\|apk\)$' >./artifact/buildinfo/packages.${{env.mode}}
-        find ./openwrt/ >./artifact/buildinfo/files.list
+        find ./openwrt/ >./artifact/buildinfo/files.${{env.mode}}
+        find ./openwrt-imagebuilder/ >./artifact/buildinfo/files.ib
 
         mkdir -p ./openwrt/bin/packages
         mv -f ./openwrt/bin/packages ./artifact/package
