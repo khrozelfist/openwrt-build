@@ -22,7 +22,6 @@ runs:
           cd openwrt
           git checkout ${{env.tag}}
         elif [ ${{inputs.mode}} == sdk ]; then
-          echo "CI=" >> $GITHUB_ENV
           SDK_FILE=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{inputs.target}}/ | grep -oP 'href="\Kopenwrt-sdk-${{env.ver}}[^"]*"' | tr -d '"')
           wget -q https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{inputs.target}}/$SDK_FILE
           mkdir -p openwrt
