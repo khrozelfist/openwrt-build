@@ -30,7 +30,7 @@ jobs:
         make defconfig
         cp ./.config ../artifact/buildinfo/config.${{env.mode}}
 
-        [ ${{env.mode}} == sdk ] && sed -i 's/--build-dir/--ci false \\\n--build-dir/' ./feeds/packages/lang/rust/Makefile
+        [ ${{env.mode}} == sdk ] && sed -i 's/x.py/x.py --ci false/' ./feeds/packages/lang/rust/Makefile
         # [ ${{env.mode}} == sdk ] && sed -i 's/--set=llvm\.download-ci-llvm=true/--set=llvm.download-ci-llvm=false/' ./feeds/packages/lang/rust/Makefile
         [ ${{env.mode}} == full ] && make tools/install j$(nproc) && make toolchain/install j$(nproc)
 
