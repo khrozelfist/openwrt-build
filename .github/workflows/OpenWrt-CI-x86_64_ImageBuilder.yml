@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v5
-    - name: Test
-      run : |
-        read -p "pause"
+#   - name: Test
+#     run : |
+#       read -p "pause"
 
     - name: Initialize environment
       uses: ./.github/actions/init
