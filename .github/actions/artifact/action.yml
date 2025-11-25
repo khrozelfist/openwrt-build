@@ -16,6 +16,7 @@ runs:
         find ./openwrt-imagebuilder/ >./artifact/buildinfo/files.ib
 
         mkdir -p ./openwrt/bin/packages
+        rm -rf ./openwrt/bin/packages/*/base
         mv -f ./openwrt/bin/packages ./artifact/package
         # PKG=$(find ./openwrt/bin/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
         # [ "$PKG" ] && cp -rf $PKG ./artifact/package/
