@@ -54,7 +54,7 @@ jobs:
 
         mkdir -p ../openwrt/bin/packages/
         MYPKG=$(find ../openwrt/bin/packages/*/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
-        LUCI=$(find ../openwrt/bin/packages/*/luci/ -type f -regex 'app-smartdns')
+        LUCI=$(find ../openwrt/bin/packages/*/luci/ -type f -regex '.*\(app-smartdns\|package2\).*')
         [ "$MYPKG" ] && cp -rf $MYPKG ./packages/
         [ "$LUCI" ] && cp -rf $LUCI ./packages/
 
