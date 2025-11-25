@@ -56,7 +56,7 @@ jobs:
         MYPKG=$(find ../openwrt/bin/packages/*/packages/ -type f -regex '.*\.\(ipk\|apk\)$')
         LUCI=$(find ../openwrt/bin/packages/*/luci/ -type f -regex 'app-smartdns')
         [ "$MYPKG" ] && cp -rf $MYPKG ./packages/
-        [ "$LUCI" ] && cp -rf $MYPKG ./packages/
+        [ "$LUCI" ] && cp -rf $LUCI ./packages/
 
         PRELIST=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/openwrt-${{env.ver}}-${{env.board}}-${{env.subtarget}}.manifest | awk '{print$1}')
 
