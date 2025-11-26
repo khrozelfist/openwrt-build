@@ -45,6 +45,5 @@ runs:
         sed -i 's|git.openwrt.org/feed/telephony.git|github.com/openwrt/telephony.git|' feeds.conf.default
 
         ./scripts/feeds update -a
-
         ./scripts/feeds install -a
         # ./scripts/feeds install -a -f
