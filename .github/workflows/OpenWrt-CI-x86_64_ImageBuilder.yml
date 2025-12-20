@@ -53,8 +53,8 @@ jobs:
         cp ./.config ../artifact/buildinfo/config.ib
 
         mkdir -p ../openwrt/bin/packages/
-        MYPKG=$(find ../openwrt/bin/packages/*/packages/ -type f -regex '.*\.\(ipk\|apk\)$' 2>/dev/null)
-        LUCI=$(find ../openwrt/bin/packages/*/luci/ -type f -regex '.*\(app-smartdns\|package2\).*' 2>/dev/null)
+        MYPKG=$(find ../openwrt/bin/packages/*/packages/ -type f -regex '.*\.\(ipk\|apk\)$' 2>/dev/null || true)
+        LUCI=$(find ../openwrt/bin/packages/*/luci/ -type f -regex '.*\(app-smartdns\|package2\).*' 2>/dev/null || true)
         [ "$MYPKG" ] && cp -rf $MYPKG ./packages/
         [ "$LUCI" ] && cp -rf $LUCI ./packages/
         # EXLIST="luci-app-smartdns smartdns-ui"
