@@ -35,8 +35,8 @@ jobs:
         [ ${{env.mode}} == full ] && make tools/install j$(nproc) && make toolchain/install j$(nproc)
 
         # make package/smartdns/compile -j1 V=sc
-        make package/smartdns/compile -j$(nproc) V=s
-        make package/luci-app-smartdns/compile -j$(nproc) V=s
+        # make package/smartdns/compile -j$(nproc) V=s
+        # make package/luci-app-smartdns/compile -j$(nproc) V=s
 
     - name: Prepare ImageBuilder
       run : |
