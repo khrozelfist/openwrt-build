@@ -16,10 +16,10 @@ jobs:
     - name: Initialize environment
       uses: ./.github/actions/init
 
-    - name: Prepare Buildroot
-      uses: ./.github/actions/buildroot
-      with:
-        mode: sdk
+#   - name: Prepare Buildroot
+#     uses: ./.github/actions/buildroot
+#     with:
+#       mode: sdk
 
     - name: Customize
       uses: ./.github/actions/custom/x86-64
@@ -52,12 +52,13 @@ jobs:
         sed -i 's/CONFIG_TARGET_ROOTFS_SQUASHFS=y/CONFIG_TARGET_ROOTFS_SQUASHFS=n/' ./.config
         cp ./.config ../artifact/buildinfo/config.ib
 
-        mkdir -p ../openwrt/bin/packages/
+        # mkdir -p ../openwrt/bin/packages/
         MYPKG=$(find ../openwrt/bin/packages/*/packages/ -type f -regex '.*\.\(ipk\|apk\)$' 2>/dev/null || true)
         LUCI=$(find ../openwrt/bin/packages/*/luci/ -type f -regex '.*\(app-smartdns\|package2\).*' 2>/dev/null || true)
         [ "$MYPKG" ] && cp -rf $MYPKG ./packages/
         [ "$LUCI" ] && cp -rf $LUCI ./packages/
-        # EXLIST="luci-app-smartdns smartdns-ui"
+        wget -q -P ./packages/ $(curl -s https://api.github.com/repos/pymumu/smartdns/releases/latest | jq -r '.assets[].browser_download_url' | grep apk | grep openwrt | grep x86_64)
+        wget -q -P ./packages/ $(curl -s https://api.github.com/repos/pymumu/smartdns/releases/latest | jq -r '.assets[].browser_download_url' | grep apk | grep luci-all)
         EXLIST="luci-app-smartdns"
 
         PRELIST=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/openwrt-${{env.ver}}-${{env.board}}-${{env.subtarget}}.manifest | awk '{print$1}')
