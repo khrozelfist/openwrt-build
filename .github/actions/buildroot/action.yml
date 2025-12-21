@@ -28,6 +28,7 @@ runs:
           tar --zstd -xf openwrt-sdk-*.tar.zst -C openwrt --strip-components=1
           cd openwrt
         elif [ ${{inputs.mode}} == none ]; then
+          mkdir -p openwrt
           exit 0
         else
           echo Wrong mode >&2 && exit 1
