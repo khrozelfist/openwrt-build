@@ -21,7 +21,7 @@ runs:
 
         mkdir -p ./files/etc/uci-defaults
         mkdir -p ./files/usr/bin
-        wget -qo /tmp/gost.tar.gz $(curl -s https://api.github.com/repos/go-gost/gost/releases/latest | jq -r '.assets[].browser_download_url' | grep linux_amd64v3)
+        wget -qO /tmp/gost.tar.gz $(curl -s https://api.github.com/repos/go-gost/gost/releases/latest | jq -r '.assets[].browser_download_url' | grep linux_amd64v3)
         tar xzf /tmp/gost.tar.gz -C /tmp
         mv /tmp/gost ./files/usr/bin/gost
         echo chmod +x /usr/bin/gost > ./files/etc/uci-defaults/99-gost
