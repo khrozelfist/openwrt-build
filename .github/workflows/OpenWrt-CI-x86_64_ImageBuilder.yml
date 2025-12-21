@@ -21,8 +21,8 @@ jobs:
 #     with:
 #       mode: sdk
 
-    - name: Customize
-      uses: ./.github/actions/custom/x86-64
+#   - name: Customize
+#     uses: ./.github/actions/custom/x86-64
 
 #   - name: Compile packages
 #     working-directory: ./openwrt
@@ -52,7 +52,13 @@ jobs:
         sed -i 's/CONFIG_TARGET_ROOTFS_SQUASHFS=y/CONFIG_TARGET_ROOTFS_SQUASHFS=n/' ./.config
         cp ./.config ../artifact/buildinfo/config.ib
 
-        # mkdir -p ../openwrt/bin/packages/
+        mkdir -p ../openwrt/files/usr/bin
+        mkdir -p ../openwrt/files/etc/uci-defaults
+        wget -qO /tmp/gost.tar.gz $(curl -s https://api.github.com/repos/go-gost/gost/releases/latest | jq -r '.assets[].browser_download_url' | grep linux_amd64v3)
+        tar xzf /tmp/gost.tar.gz -C /tmp
+        mv /tmp/gost ../openwrt/files/usr/bin/gost
+        echo chmod +x /usr/bin/gost > ./files/etc/uci-defaults/99-gost
+
         MYPKG=$(find ../openwrt/bin/packages/*/packages/ -type f -regex '.*\.\(ipk\|apk\)$' 2>/dev/null || true)
         LUCI=$(find ../openwrt/bin/packages/*/luci/ -type f -regex '.*\(app-smartdns\|package2\).*' 2>/dev/null || true)
         [ "$MYPKG" ] && cp -rf $MYPKG ./packages/
