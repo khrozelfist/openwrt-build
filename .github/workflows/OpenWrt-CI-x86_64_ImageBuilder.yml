@@ -19,25 +19,25 @@ jobs:
     - name: Prepare Buildroot
       uses: ./.github/actions/buildroot
       with:
-        mode: sdk
+        mode: none
         target: x86/64
 
     - name: Customize
       uses: ./.github/actions/custom/x86-64
 
-    - name: Compile packages
-      working-directory: ./openwrt
-      run : |
-        make defconfig
-        cp ./.config ../artifact/buildinfo/config.${{env.mode}}
+#   - name: Compile packages
+#     working-directory: ./openwrt
+#     run : |
+#       make defconfig
+#       cp ./.config ../artifact/buildinfo/config.${{env.mode}}
 
-        [ ${{env.mode}} == sdk ] && sed -i 's/x.py/x.py --ci false/' ./feeds/packages/lang/rust/Makefile
-        # [ ${{env.mode}} == sdk ] && sed -i 's/--set=llvm\.download-ci-llvm=true/--set=llvm.download-ci-llvm=false/' ./feeds/packages/lang/rust/Makefile
-        [ ${{env.mode}} == full ] && make tools/install j$(nproc) && make toolchain/install j$(nproc)
+#       [ ${{env.mode}} == sdk ] && sed -i 's/x.py/x.py --ci false/' ./feeds/packages/lang/rust/Makefile
+#       # [ ${{env.mode}} == sdk ] && sed -i 's/--set=llvm\.download-ci-llvm=true/--set=llvm.download-ci-llvm=false/' ./feeds/packages/lang/rust/Makefile
+#       [ ${{env.mode}} == full ] && make tools/install j$(nproc) && make toolchain/install j$(nproc)
 
-        # make package/smartdns/compile -j1 V=sc
-        make package/smartdns/compile -j$(nproc) V=s
-        make package/luci-app-smartdns/compile -j$(nproc) V=s
+#       # make package/smartdns/compile -j1 V=sc
+#       make package/smartdns/compile -j$(nproc) V=s
+#       make package/luci-app-smartdns/compile -j$(nproc) V=s
 
     - name: Prepare ImageBuilder
       run : |
@@ -57,8 +57,8 @@ jobs:
         LUCI=$(find ../openwrt/bin/packages/*/luci/ -type f -regex '.*\(app-smartdns\|package2\).*' 2>/dev/null || true)
         [ "$MYPKG" ] && cp -rf $MYPKG ./packages/
         [ "$LUCI" ] && cp -rf $LUCI ./packages/
-        wget -qP ./packages/ $(curl -s https://api.github.com/repos/pymumu/smartdns/releases/latest | jq -r '.assets[].browser_download_url' | grep apk | grep openwrt | grep x86_64)
-        wget -qP ./packages/ $(curl -s https://api.github.com/repos/pymumu/smartdns/releases/latest | jq -r '.assets[].browser_download_url' | grep apk | grep luci-all)
+        # wget -qP ./packages/ $(curl -s https://api.github.com/repos/pymumu/smartdns/releases/latest | jq -r '.assets[].browser_download_url' | grep apk | grep openwrt | grep x86_64)
+        # wget -qP ./packages/ $(curl -s https://api.github.com/repos/pymumu/smartdns/releases/latest | jq -r '.assets[].browser_download_url' | grep apk | grep luci-all)
         # APK_FLAGS="--allow-untrusted"
         # ./staging_dir/host/bin/apk index --allow-untrusted -o ./packages/packages.adb ./packages/*.apk
         EXLIST="luci-app-smartdns"
