@@ -148,7 +148,6 @@ jobs:
         "
 
         make image -j$(nproc) V=s \
-          # APK_FLAGS="--allow-untrusted" \
           PACKAGES="$(echo $PRELIST $MYLIST $EXLIST)" \
           FILES="$GITHUB_WORKSPACE/openwrt/files" \
           ROOTFS_PARTSIZE="1024"
