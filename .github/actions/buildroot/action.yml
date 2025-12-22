@@ -24,11 +24,12 @@ runs:
         elif [ ${{inputs.mode}} == sdk ]; then
           SDK_FILE=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{inputs.target}}/ | grep -oP 'href="\Kopenwrt-sdk-${{env.ver}}[^"]*"' | tr -d '"')
           wget -q https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{inputs.target}}/$SDK_FILE
-          mkdir -p openwrt
+          mkdir -p ./openwrt
           tar --zstd -xf openwrt-sdk-*.tar.zst -C openwrt --strip-components=1
           cd openwrt
         elif [ ${{inputs.mode}} == none ]; then
-          mkdir -p openwrt
+          mkdir -p ./openwrt
+          mkdir -p ./openwrt/bin/
           exit 0
         else
           echo Wrong mode >&2 && exit 1
