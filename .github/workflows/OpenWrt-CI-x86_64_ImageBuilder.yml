@@ -53,13 +53,14 @@ jobs:
         sed -i 's/CONFIG_TARGET_ROOTFS_SQUASHFS=y/CONFIG_TARGET_ROOTFS_SQUASHFS=n/' ./.config
         cp ./.config ../artifact/buildinfo/config.ib
 
+        rm ./packages/*.apk
         MYPKG=$(find ../openwrt/bin/packages/*/packages/ -type f -regex '.*\.\(ipk\|apk\)$' 2>/dev/null || true)
         LUCI=$(find ../openwrt/bin/packages/*/luci/ -type f -regex '.*\(app-smartdns\|package2\).*' 2>/dev/null || true)
         [ "$MYPKG" ] && cp -rf $MYPKG ./packages/
         [ "$LUCI" ] && cp -rf $LUCI ./packages/
         wget -qP ./packages/ $(curl -s https://api.github.com/repos/pymumu/smartdns/releases/latest | jq -r '.assets[].browser_download_url' | grep apk | grep openwrt | grep x86_64)
         wget -qP ./packages/ $(curl -s https://api.github.com/repos/pymumu/smartdns/releases/latest | jq -r '.assets[].browser_download_url' | grep apk | grep luci-all)
-        ./staging_dir/host/bin/apk index --allow-untrusted -o ./packages/packages.adb ./packages/*.apk
+        # ./staging_dir/host/bin/apk index --allow-untrusted -o ./packages/packages.adb ./packages/*.apk
         EXLIST="luci-app-smartdns"
 
         PRELIST=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/openwrt-${{env.ver}}-${{env.board}}-${{env.subtarget}}.manifest | awk '{print$1}')
