@@ -53,7 +53,8 @@ jobs:
         sed -i 's/CONFIG_TARGET_ROOTFS_SQUASHFS=y/CONFIG_TARGET_ROOTFS_SQUASHFS=n/' ./.config
         cp ./.config ../artifact/buildinfo/config.ib
 
-        rm ./packages/*.apk
+        ls ./packages/*.apk
+        read -p "pause"
         MYPKG=$(find ../openwrt/bin/packages/*/packages/ -type f -regex '.*\.\(ipk\|apk\)$' 2>/dev/null || true)
         LUCI=$(find ../openwrt/bin/packages/*/luci/ -type f -regex '.*\(app-smartdns\|package2\).*' 2>/dev/null || true)
         [ "$MYPKG" ] && cp -rf $MYPKG ./packages/
