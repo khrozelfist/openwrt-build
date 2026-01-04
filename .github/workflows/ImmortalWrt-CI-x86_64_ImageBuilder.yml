@@ -1,0 +1,152 @@
+name: ImmortalWrt-CI-x86_64 (ImageBuilder)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_openwrt:
+    name: Build ImmortalWrt firmware
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+#   - name: Test
+#     run : |
+#       read -p "pause"
+
+    - name: Initialize environment
+      uses: ./.github/actions/init
+      with:
+        repo: immortalwrt
+
+    - name: Prepare Buildroot
+      uses: ./.github/actions/buildroot
+      with:
+        mode: none
+        target: x86/64
+
+    - name: Customize
+      uses: ./.github/actions/custom/x86-64
+
+#   - name: Compile packages
+#     working-directory: ./openwrt
+#     run : |
+#       make defconfig
+#       cp ./.config ../artifact/buildinfo/config.${{env.mode}}
+
+#       [ ${{env.mode}} == sdk ] && sed -i 's/x.py/x.py --ci false/' ./feeds/packages/lang/rust/Makefile
+#       # [ ${{env.mode}} == sdk ] && sed -i 's/--set=llvm\.download-ci-llvm=true/--set=llvm.download-ci-llvm=false/' ./feeds/packages/lang/rust/Makefile
+#       [ ${{env.mode}} == full ] && make tools/install j$(nproc) && make toolchain/install j$(nproc)
+
+#       # make package/smartdns/compile -j1 V=sc
+#       make package/smartdns/compile -j$(nproc) V=s
+#       make package/luci-app-smartdns/compile -j$(nproc) V=s
+
+    - name: Prepare ImageBuilder
+      run : |
+        IB_FILE=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/ | grep -oP 'href="\Kopenwrt-imagebuilder-${{env.ver}}[^"]*"' | tr -d '"')
+        wget -q https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/$IB_FILE
+        mkdir -p openwrt-imagebuilder
+        tar --zstd -xf openwrt-imagebuilder-*.tar.zst -C openwrt-imagebuilder --strip-components=1
+
+    - name: Build image
+      working-directory: ./openwrt-imagebuilder
+      run : |
+        sed -i 's/CONFIG_TARGET_ROOTFS_TARGZ=y/CONFIG_TARGET_ROOTFS_TARGZ=n/' ./.config
+        sed -i 's/CONFIG_TARGET_ROOTFS_SQUASHFS=y/CONFIG_TARGET_ROOTFS_SQUASHFS=n/' ./.config
+        cp ./.config ../artifact/buildinfo/config.ib
+
+        MYPKG=$(find ../openwrt/bin/packages/*/packages/ -type f -regex '.*\.\(ipk\|apk\)$' 2>/dev/null || true)
+        LUCI=$(find ../openwrt/bin/packages/*/luci/ -type f -regex '.*\(app-smartdns\|package2\).*' 2>/dev/null || true)
+        [ "$MYPKG" ] && cp -rf $MYPKG ./packages/
+        [ "$LUCI" ] && cp -rf $LUCI ./packages/
+        # wget -qP ./packages/ $(curl -s https://api.github.com/repos/pymumu/smartdns/releases/latest | jq -r '.assets[].browser_download_url' | grep apk | grep openwrt | grep x86_64)
+        # wget -qP ./packages/ $(curl -s https://api.github.com/repos/pymumu/smartdns/releases/latest | jq -r '.assets[].browser_download_url' | grep apk | grep luci-all)
+        # APK_FLAGS="--allow-untrusted"
+        # ./staging_dir/host/bin/apk index --allow-untrusted -o ./packages/packages.adb ./packages/*.apk
+        EXLIST="luci-app-smartdns"
+
+        PRELIST=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/openwrt-${{env.ver}}-${{env.board}}-${{env.subtarget}}.manifest | awk '{print$1}')
+
+        MYLIST="
+        -dnsmasq
+        kmod-tcp-bbr
+        kmod-macvlan
+        kmod-fs-ext4
+        kmod-nft-tproxy
+        kmod-nft-netdev
+        libcap-bin
+        wpad-mbedtls
+        coreutils
+        coreutils-base64
+        coreutils-sha1sum
+        ca-certificates
+        dnsmasq-full
+        ethtool-full
+        ip-full
+        nano
+        curl
+        openssh-sftp-server
+        irqbalance
+        tcpdump
+        iperf3
+        fdisk
+        parted
+        losetup
+        resize2fs
+        lsblk
+        blkid
+        block-mount
+        conntrack
+        bind-dig
+        drill
+        bash
+        pciutils
+        proxychains-ng
+        htop
+        hostapd-utils
+        uxc
+        sudo
+        python3-pip
+        xxd
+        cifsmount
+        screen
+        ncat-full
+        collectd-mod-thermal
+        collectd-mod-exec
+        collectd-mod-conntrack
+        collectd-mod-ipstatistics
+        collectd-mod-processes
+        collectd-mod-tcpconns
+        collectd-mod-uptime
+        collectd-mod-ping
+        collectd-mod-dns
+        xray-core
+        luci-proto-wireguard
+        luci-app-wol
+        luci-app-ddns
+        luci-app-mwan3
+        luci-app-samba4
+        luci-app-vnstat2
+        luci-app-statistics
+        luci-app-natmap
+        luci-app-upnp
+        luci-app-dockerman
+        luci-lib-docker
+        luci-app-passwall
+        "
+
+        TMPLIST="
+        rp-pppoe-relay
+        luci-app-dawn
+        luci-app-nlbwmon
+        "
+
+        make image -j$(nproc) V=s \
+          PACKAGES="$(echo $PRELIST $MYLIST $EXLIST)" \
+          FILES="$GITHUB_WORKSPACE/openwrt/files" \
+          ROOTFS_PARTSIZE="1024"
+
+        cp ./bin/targets/${{env.board}}/${{env.subtarget}}/*ext4-combined-efi* ../artifact/firmware/
+
+    - name: Deliver artifact
+      uses: ./.github/actions/artifact
