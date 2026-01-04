@@ -15,6 +15,8 @@ jobs:
 
     - name: Initialize environment
       uses: ./.github/actions/init
+      with:
+        repo: openwrt
 
     - name: Prepare Buildroot
       uses: ./.github/actions/buildroot
@@ -41,16 +43,23 @@ jobs:
 
     - name: Prepare ImageBuilder
       run : |
-        IB_FILE=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/ | grep -oP 'href="\Kopenwrt-imagebuilder-${{env.ver}}[^"]*"' | tr -d '"')
-        wget -q https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/$IB_FILE
+        IB_FILE=$(curl -s https://downloads.${{env.repo}}.org/releases/${{env.ver}}/targets/${{env.target}}/ | grep -oP 'href="\K${{env.repo}}-imagebuilder-${{env.ver}}[^"]*"' | tr -d '"')
+        wget -q https://downloads.${{env.repo}}.org/releases/${{env.ver}}/targets/${{env.target}}/$IB_FILE
         mkdir -p openwrt-imagebuilder
-        tar --zstd -xf openwrt-imagebuilder-*.tar.zst -C openwrt-imagebuilder --strip-components=1
+        tar --zstd -xf ${{env.repo}}-imagebuilder-*.tar.zst -C openwrt-imagebuilder --strip-components=1
 
     - name: Build image
       working-directory: ./openwrt-imagebuilder
       run : |
         sed -i 's/CONFIG_TARGET_ROOTFS_TARGZ=y/CONFIG_TARGET_ROOTFS_TARGZ=n/' ./.config
         sed -i 's/CONFIG_TARGET_ROOTFS_SQUASHFS=y/CONFIG_TARGET_ROOTFS_SQUASHFS=n/' ./.config
+        [ ${{env.repo}} == immortalwrt ] && {
+          sed -i 's/CONFIG_ISO_IMAGES=y/CONFIG_ISO_IMAGES=n/' ./.config
+          sed -i 's/CONFIG_QCOW2_IMAGES=y/CONFIG_QCOW2_IMAGES=n/' ./.config
+          sed -i 's/CONFIG_VDI_IMAGES=y/CONFIG_VDI_IMAGES=n/' ./.config
+          sed -i 's/CONFIG_VHDX_IMAGES=y/CONFIG_VHDX_IMAGES=n/' ./.config
+          sed -i 's/CONFIG_VMDK_IMAGES=y/CONFIG_VMDK_IMAGES=n/' ./.config
+        }
         cp ./.config ../artifact/buildinfo/config.ib
 
         MYPKG=$(find ../openwrt/bin/packages/*/packages/ -type f -regex '.*\.\(ipk\|apk\)$' 2>/dev/null || true)
@@ -63,7 +72,7 @@ jobs:
         # ./staging_dir/host/bin/apk index --allow-untrusted -o ./packages/packages.adb ./packages/*.apk
         EXLIST="luci-app-smartdns"
 
-        PRELIST=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/openwrt-${{env.ver}}-${{env.board}}-${{env.subtarget}}.manifest | awk '{print$1}')
+        PRELIST=$(curl -s https://downloads.${{env.repo}}.org/releases/${{env.ver}}/targets/${{env.target}}/${{env.repo}}-${{env.ver}}-${{env.board}}-${{env.subtarget}}.manifest | awk '{print$1}')
 
         MYLIST="
         -dnsmasq
