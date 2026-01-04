@@ -43,10 +43,10 @@ jobs:
 
     - name: Prepare ImageBuilder
       run : |
-        IB_FILE=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/ | grep -oP 'href="\Kopenwrt-imagebuilder-${{env.ver}}[^"]*"' | tr -d '"')
-        wget -q https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/$IB_FILE
-        mkdir -p openwrt-imagebuilder
-        tar --zstd -xf openwrt-imagebuilder-*.tar.zst -C openwrt-imagebuilder --strip-components=1
+        IB_FILE=$(curl -s https://downloads.${{env.repo}}.org/releases/${{env.ver}}/targets/${{env.target}}/ | grep -oP 'href="\K${{env.repo}}-imagebuilder-${{env.ver}}[^"]*"' | tr -d '"')
+        wget -q https://downloads.${{env.repo}}.org/releases/${{env.ver}}/targets/${{env.target}}/$IB_FILE
+        mkdir -p ${{env.repo}}-imagebuilder
+        tar --zstd -xf ${{env.repo}}-imagebuilder-*.tar.zst -C openwrt-imagebuilder --strip-components=1
 
     - name: Build image
       working-directory: ./openwrt-imagebuilder
@@ -65,7 +65,7 @@ jobs:
         # ./staging_dir/host/bin/apk index --allow-untrusted -o ./packages/packages.adb ./packages/*.apk
         EXLIST="luci-app-smartdns"
 
-        PRELIST=$(curl -s https://downloads.openwrt.org/releases/${{env.ver}}/targets/${{env.target}}/openwrt-${{env.ver}}-${{env.board}}-${{env.subtarget}}.manifest | awk '{print$1}')
+        PRELIST=$(curl -s https://downloads.${{env.repo}}.org/releases/${{env.ver}}/targets/${{env.target}}/${{env.repo}}-${{env.ver}}-${{env.board}}-${{env.subtarget}}.manifest | awk '{print$1}')
 
         MYLIST="
         -dnsmasq
