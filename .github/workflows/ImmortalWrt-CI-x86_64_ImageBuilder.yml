@@ -45,7 +45,7 @@ jobs:
       run : |
         IB_FILE=$(curl -s https://downloads.${{env.repo}}.org/releases/${{env.ver}}/targets/${{env.target}}/ | grep -oP 'href="\K${{env.repo}}-imagebuilder-${{env.ver}}[^"]*"' | tr -d '"')
         wget -q https://downloads.${{env.repo}}.org/releases/${{env.ver}}/targets/${{env.target}}/$IB_FILE
-        mkdir -p ${{env.repo}}-imagebuilder
+        mkdir -p openwrt-imagebuilder
         tar --zstd -xf ${{env.repo}}-imagebuilder-*.tar.zst -C openwrt-imagebuilder --strip-components=1
 
     - name: Build image
