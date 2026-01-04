@@ -132,7 +132,6 @@ jobs:
         luci-proto-wireguard
         luci-app-wol
         luci-app-ddns
-        luci-app-mwan3
         luci-app-samba4
         luci-app-vnstat2
         luci-app-statistics
