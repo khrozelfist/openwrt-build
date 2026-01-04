@@ -69,6 +69,7 @@ jobs:
 
         MYLIST="
         -dnsmasq
+        -ethtool
         kmod-tcp-bbr
         kmod-macvlan
         kmod-fs-ext4
