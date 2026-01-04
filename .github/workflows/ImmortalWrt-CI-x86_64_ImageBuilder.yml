@@ -152,7 +152,7 @@ jobs:
         make image -j$(nproc) V=s \
           PACKAGES="$(echo $PRELIST $MYLIST $EXLIST)" \
           FILES="$GITHUB_WORKSPACE/openwrt/files" \
-          ROOTFS_PARTSIZE="1024"
+          ROOTFS_PARTSIZE="2048"
 
         cp ./bin/targets/${{env.board}}/${{env.subtarget}}/*ext4-combined-efi* ../artifact/firmware/
 
