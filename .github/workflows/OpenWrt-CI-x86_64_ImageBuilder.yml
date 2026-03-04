@@ -123,6 +123,7 @@ jobs:
         cifsmount
         screen
         ncat-full
+        ddns-scripts-cloudflare
         collectd-mod-thermal
         collectd-mod-exec
         collectd-mod-conntrack
