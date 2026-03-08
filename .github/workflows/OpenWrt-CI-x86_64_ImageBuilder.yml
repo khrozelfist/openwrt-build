@@ -71,10 +71,9 @@ jobs:
         wget -qP ./packages/ $(curl -s https://api.github.com/repos/pymumu/smartdns/releases/latest | jq -r '.assets[].browser_download_url' | grep apk | grep luci-all)
         EXLIST="luci-app-smartdns"
 
-        find ./packages/ -type f -name '*.apk' | read && \
-        ./staging_dir/host/bin/apk mkndx --allow-untrusted -o ./packages/packages.adb ./packages/*.apk && \
-        ./staging_dir/host/bin/apk manifest --package ./packages/*.apk > ./packages/packages
-        APK_FLAGS="--allow-untrusted"
+        # find ./packages/ -type f -name '*.apk' | read && \
+        # ./staging_dir/host/bin/apk mkndx --allow-untrusted -o ./packages/packages.adb ./packages/*.apk && \
+        # APK_FLAGS="--allow-untrusted"
 
         PRELIST=$(curl -s https://downloads.${{env.repo}}.org/releases/${{env.ver}}/targets/${{env.target}}/${{env.repo}}-${{env.ver}}-${{env.board}}-${{env.subtarget}}.manifest | awk '{print$1}')
 
@@ -164,7 +163,8 @@ jobs:
         make image -j$(nproc) V=s \
           PACKAGES="$(echo $PRELIST $MYLIST $EXLIST)" \
           FILES="$GITHUB_WORKSPACE/openwrt/files" \
-          ROOTFS_PARTSIZE="1024"
+          ROOTFS_PARTSIZE="1024" \
+          APK_FLAGS="--allow-untrusted"
 
         cp ./bin/targets/${{env.board}}/${{env.subtarget}}/*ext4-combined-efi* ../artifact/firmware/
 
