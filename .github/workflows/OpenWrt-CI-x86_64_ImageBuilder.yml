@@ -69,7 +69,7 @@ jobs:
         [ "$LUCI" ] && cp -rf $LUCI ./packages/
         wget -qP ./packages/ $(curl -s https://api.github.com/repos/pymumu/smartdns/releases/latest | jq -r '.assets[].browser_download_url' | grep apk | grep openwrt | grep x86_64)
         wget -qP ./packages/ $(curl -s https://api.github.com/repos/pymumu/smartdns/releases/latest | jq -r '.assets[].browser_download_url' | grep apk | grep luci-all)
-        # APK_FLAGS="--allow-untrusted"
+        APK_FLAGS="--allow-untrusted"
         find ./packages/ -type f -name '*.apk' | read && ./staging_dir/host/bin/apk mkndx --allow-untrusted -o ./packages/packages.adb ./packages/*.apk
         EXLIST="luci-app-smartdns"
 
