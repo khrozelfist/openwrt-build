@@ -13,6 +13,8 @@ runs:
         find ./$MAIN/bin/targets/ -path "*/packages" -prune -o -type f -printf "%p %s\n" >./artifact/buildinfo/targets.output
         find ./openwrt/bin/ -type f -regex '.*\.\(ipk\|apk\)$' >./artifact/buildinfo/packages.${{env.mode}}
         find ./openwrt/ >./artifact/buildinfo/files.${{env.mode}}
+        [ -d ./openwrt-imagebuilder/ ] && \
+        find ./openwrt-imagebuilder/packages >./artifact/buildinfo/packages.ib && \
         find ./openwrt-imagebuilder/ >./artifact/buildinfo/files.ib
 
         mkdir -p ./openwrt/bin/packages
