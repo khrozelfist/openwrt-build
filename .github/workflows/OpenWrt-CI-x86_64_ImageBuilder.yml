@@ -62,7 +62,7 @@ jobs:
         }
         cp ./.config ../artifact/buildinfo/config.ib
 
-        rm ./packages/*.apk
+        # rm ./packages/*.apk
         MYPKG=$(find ../openwrt/bin/packages/*/packages/ -type f -regex '.*\.\(ipk\|apk\)$' 2>/dev/null || true)
         LUCI=$(find ../openwrt/bin/packages/*/luci/ -type f -regex '.*\(app-smartdns\|package2\).*' 2>/dev/null || true)
         [ "$MYPKG" ] && cp -rf $MYPKG ./packages/
