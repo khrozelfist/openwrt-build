@@ -71,9 +71,8 @@ jobs:
         wget -qP ./packages/ $(curl -s https://api.github.com/repos/pymumu/smartdns/releases/latest | jq -r '.assets[].browser_download_url' | grep apk | grep luci-all)
         EXLIST="luci-app-smartdns"
 
-        # find ./packages/ -type f -name '*.apk' | read && \
-        # ./staging_dir/host/bin/apk mkndx --allow-untrusted -o ./packages/packages.adb ./packages/*.apk && \
-        # APK_FLAGS="--allow-untrusted --repository ./packages"
+        find ./packages/ -type f -name '*.apk' | read && \
+        ./staging_dir/host/bin/apk mkndx --allow-untrusted -o ./packages/packages.adb ./packages/*.apk
 
         PRELIST=$(curl -s https://downloads.${{env.repo}}.org/releases/${{env.ver}}/targets/${{env.target}}/${{env.repo}}-${{env.ver}}-${{env.board}}-${{env.subtarget}}.manifest | awk '{print$1}')
 
