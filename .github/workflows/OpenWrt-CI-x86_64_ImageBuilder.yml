@@ -163,7 +163,7 @@ jobs:
           PACKAGES="$(echo $PRELIST $MYLIST $EXLIST)" \
           FILES="$GITHUB_WORKSPACE/openwrt/files" \
           ROOTFS_PARTSIZE="1024" \
-          APK_FLAGS="--allow-untrusted --repository $GITHUB_WORKSPACE/openwrt-imagebuilder/packages"
+          APK_FLAGS="--allow-untrusted"
 
         cp ./bin/targets/${{env.board}}/${{env.subtarget}}/*ext4-combined-efi* ../artifact/firmware/
 
