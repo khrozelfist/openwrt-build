@@ -73,7 +73,7 @@ jobs:
 
         find ./packages/ -type f -name '*.apk' | read && \
         ./staging_dir/host/bin/apk mkndx --allow-untrusted -o ./packages/packages.adb ./packages/*.apk && \
-        # APK_FLAGS="--allow-untrusted"
+        # APK_FLAGS="--allow-untrusted --repository ./packages"
 
         PRELIST=$(curl -s https://downloads.${{env.repo}}.org/releases/${{env.ver}}/targets/${{env.target}}/${{env.repo}}-${{env.ver}}-${{env.board}}-${{env.subtarget}}.manifest | awk '{print$1}')
 
@@ -164,7 +164,7 @@ jobs:
           PACKAGES="$(echo $PRELIST $MYLIST $EXLIST)" \
           FILES="$GITHUB_WORKSPACE/openwrt/files" \
           ROOTFS_PARTSIZE="1024" \
-          APK_FLAGS="--allow-untrusted"
+          APK_FLAGS="--allow-untrusted --repository ./packages"
 
         cp ./bin/targets/${{env.board}}/${{env.subtarget}}/*ext4-combined-efi* ../artifact/firmware/
 
