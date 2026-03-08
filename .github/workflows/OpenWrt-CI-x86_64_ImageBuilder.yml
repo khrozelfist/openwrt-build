@@ -73,7 +73,7 @@ jobs:
 
         find ./packages/ -type f -name '*.apk' | read && \
         ./staging_dir/host/bin/apk mkndx --allow-untrusted -o ./packages/packages.adb ./packages/*.apk && \
-        ./staging_dir/host/bin/apk manifest ./packages/*.apk > ./packages/Packages
+        ./staging_dir/host/bin/apk manifest --package ./packages/*.apk > ./packages/packages
         APK_FLAGS="--allow-untrusted"
 
         PRELIST=$(curl -s https://downloads.${{env.repo}}.org/releases/${{env.ver}}/targets/${{env.target}}/${{env.repo}}-${{env.ver}}-${{env.board}}-${{env.subtarget}}.manifest | awk '{print$1}')
