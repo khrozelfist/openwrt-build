@@ -128,7 +128,7 @@ jobs:
           FILES="$GITHUB_WORKSPACE/openwrt/files" \
           ROOTFS_PARTSIZE="2048"
 
-        cp ./bin/targets/${{env.board}}/${{env.subtarget}}/*ext4-combined-efi* ../artifact/firmware/
+        cp ./bin/targets/${{env.board}}/${{env.subtarget}}/*ext4-* ../artifact/firmware/
 
     - name: Deliver artifact
       uses: ./.github/actions/artifact
