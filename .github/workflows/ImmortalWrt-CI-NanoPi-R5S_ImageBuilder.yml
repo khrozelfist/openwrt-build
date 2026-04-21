@@ -58,7 +58,6 @@ jobs:
         kmod-nft-tproxy
         kmod-nft-netdev
         libcap-bin
-        wpad-mbedtls
         coreutils
         coreutils-base64
         coreutils-sha1sum
@@ -117,7 +116,9 @@ jobs:
         "
 
         TMPLIST="
+        wpad-mbedtls
         rp-pppoe-relay
+        luci-lib-docker
         luci-app-dawn
         luci-app-nlbwmon
         "
