@@ -38,6 +38,9 @@ jobs:
       working-directory: ./openwrt-imagebuilder
       run : |
         sed -i '/CONFIG_TARGET_rockchip_armv8_DEVICE_friendlyarm_nanopi-r5s/c\CONFIG_TARGET_rockchip_armv8_DEVICE_friendlyarm_nanopi-r5s=y' ./.config
+        sed -i 's/CONFIG_TARGET_MULTI_PROFILE=y/CONFIG_TARGET_MULTI_PROFILE=n/' ./.config
+        sed -i 's/CONFIG_TARGET_ALL_PROFILES=y/CONFIG_TARGET_ALL_PROFILES=n/' ./.config
+        sed -i 's/CONFIG_TARGET_PER_DEVICE_ROOTFS=y/CONFIG_TARGET_PER_DEVICE_ROOTFS=n/' ./.config
         sed -i 's/CONFIG_TARGET_ROOTFS_TARGZ=y/CONFIG_TARGET_ROOTFS_TARGZ=n/' ./.config
         sed -i 's/CONFIG_TARGET_ROOTFS_SQUASHFS=y/CONFIG_TARGET_ROOTFS_SQUASHFS=n/' ./.config
         cp ./.config ../artifact/buildinfo/config.ib
