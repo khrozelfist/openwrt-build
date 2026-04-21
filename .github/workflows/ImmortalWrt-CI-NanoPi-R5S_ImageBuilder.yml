@@ -37,11 +37,9 @@ jobs:
     - name: Build image
       working-directory: ./openwrt-imagebuilder
       run : |
-        sed -i '/CONFIG_TARGET_/d' ./.config
+        sed -i '/CONFIG_TARGET_rockchip_armv8_DEVICE_/d' ./.config
+        sed -i '/CONFIG_TARGET_DEVICE_/d' ./.config
         cat >> ./.config <<EOF
-        CONFIG_TARGET_rockchip=y
-        CONFIG_TARGET_rockchip_armv8=y
-        CONFIG_TARGET_MULTI_PROFILE=y
         CONFIG_TARGET_rockchip_armv8_DEVICE_friendlyarm_nanopi-r5s=y
         CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_friendlyarm_nanopi-r5s=y
         EOF
