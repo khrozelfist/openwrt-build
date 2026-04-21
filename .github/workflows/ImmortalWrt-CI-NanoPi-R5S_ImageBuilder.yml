@@ -37,12 +37,8 @@ jobs:
     - name: Build image
       working-directory: ./openwrt-imagebuilder
       run : |
-        sed -i '/CONFIG_TARGET_rockchip_armv8_DEVICE_/d' ./.config
-        sed -i '/CONFIG_TARGET_DEVICE_/d' ./.config
-        cat >> ./.config <<EOF
-        CONFIG_TARGET_rockchip_armv8_DEVICE_friendlyarm_nanopi-r5s=y
-        CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_friendlyarm_nanopi-r5s=y
-        EOF
+        sed -i '/CONFIG_TARGET_rockchip_armv8_DEVICE_/c\CONFIG_TARGET_rockchip_armv8_DEVICE_friendlyarm_nanopi-r5s=y' ./.config
+        sed -i '/CONFIG_TARGET_DEVICE_/c\CONFIG_TARGET_DEVICE_rockchip_armv8_DEVICE_friendlyarm_nanopi-r5s=y' ./.config
         cp ./.config ../artifact/buildinfo/config.ib
 
         MYPKG=$(find ../openwrt/bin/packages/*/packages/ -type f -regex '.*\.\(ipk\|apk\)$' 2>/dev/null || true)
