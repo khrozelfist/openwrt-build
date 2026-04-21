@@ -1,0 +1,134 @@
+name: ImmortalWrt-CI-NanoPi-R5S (ImageBuilder)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_openwrt:
+    name: Build ImmortalWrt firmware
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+#   - name: Test
+#     run : |
+#       read -p "pause"
+
+    - name: Initialize environment
+      uses: ./.github/actions/init
+      with:
+        repo: immortalwrt
+
+    - name: Prepare Buildroot
+      uses: ./.github/actions/buildroot
+      with:
+        mode: none
+        target: rockchip/armv8
+
+    - name: Customize
+      uses: ./.github/actions/custom/NanoPi-R5S
+
+    - name: Prepare ImageBuilder
+      run : |
+        IB_FILE=$(curl -s https://downloads.${{env.repo}}.org/releases/${{env.ver}}/targets/${{env.target}}/ | grep -oP 'href="\K${{env.repo}}-imagebuilder-${{env.ver}}[^"]*"' | tr -d '"')
+        wget -q https://downloads.${{env.repo}}.org/releases/${{env.ver}}/targets/${{env.target}}/$IB_FILE
+        mkdir -p openwrt-imagebuilder
+        tar --zstd -xf ${{env.repo}}-imagebuilder-*.tar.zst -C openwrt-imagebuilder --strip-components=1
+
+    - name: Build image
+      working-directory: ./openwrt-imagebuilder
+      run : |
+        sed -i 's/CONFIG_TARGET_ROOTFS_TARGZ=y/CONFIG_TARGET_ROOTFS_TARGZ=n/' ./.config
+        sed -i 's/CONFIG_TARGET_ROOTFS_SQUASHFS=y/CONFIG_TARGET_ROOTFS_SQUASHFS=n/' ./.config
+        cp ./.config ../artifact/buildinfo/config.ib
+
+        MYPKG=$(find ../openwrt/bin/packages/*/packages/ -type f -regex '.*\.\(ipk\|apk\)$' 2>/dev/null || true)
+        LUCI=$(find ../openwrt/bin/packages/*/luci/ -type f -regex '.*\(app-smartdns\|package2\).*' 2>/dev/null || true)
+        [ "$MYPKG" ] && cp -rf $MYPKG ./packages/
+        [ "$LUCI" ] && cp -rf $LUCI ./packages/
+        EXLIST="luci-app-smartdns"
+
+        PRELIST=$(curl -s https://downloads.${{env.repo}}.org/releases/${{env.ver}}/targets/${{env.target}}/${{env.repo}}-${{env.ver}}-${{env.board}}-${{env.subtarget}}.manifest | awk '{print$1}')
+
+        MYLIST="
+        -dnsmasq
+        -ethtool
+        kmod-tcp-bbr
+        kmod-macvlan
+        kmod-fs-ext4
+        kmod-nft-tproxy
+        kmod-nft-netdev
+        libcap-bin
+        wpad-mbedtls
+        coreutils
+        coreutils-base64
+        coreutils-sha1sum
+        ca-certificates
+        dnsmasq-full
+        ethtool-full
+        ip-full
+        nano
+        curl
+        openssh-sftp-server
+        irqbalance
+        tcpdump
+        iperf3
+        fdisk
+        parted
+        losetup
+        resize2fs
+        lsblk
+        blkid
+        block-mount
+        conntrack
+        bind-dig
+        drill
+        bash
+        pciutils
+        proxychains-ng
+        htop
+        hostapd-utils
+        uxc
+        sudo
+        python3-pip
+        xxd
+        cifsmount
+        screen
+        ncat-full
+        collectd-mod-thermal
+        collectd-mod-exec
+        collectd-mod-conntrack
+        collectd-mod-ipstatistics
+        collectd-mod-processes
+        collectd-mod-tcpconns
+        collectd-mod-uptime
+        collectd-mod-ping
+        collectd-mod-dns
+        xray-core
+        luci-proto-wireguard
+        luci-app-wol
+        luci-app-ddns
+        luci-app-samba4
+        luci-app-vnstat2
+        luci-app-statistics
+        luci-app-natmap
+        luci-app-upnp
+        luci-app-dockerman
+        luci-lib-docker
+        luci-app-passwall
+        "
+
+        TMPLIST="
+        rp-pppoe-relay
+        luci-app-dawn
+        luci-app-nlbwmon
+        "
+
+        make image -j$(nproc) V=s \
+          PACKAGES="$(echo $PRELIST $MYLIST $EXLIST)" \
+          FILES="$GITHUB_WORKSPACE/openwrt/files" \
+          ROOTFS_PARTSIZE="2048"
+
+        cp ./bin/targets/${{env.board}}/${{env.subtarget}}/*ext4-combined-efi* ../artifact/firmware/
+
+    - name: Deliver artifact
+      uses: ./.github/actions/artifact
