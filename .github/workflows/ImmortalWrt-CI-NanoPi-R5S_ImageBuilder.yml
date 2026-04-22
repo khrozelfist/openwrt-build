@@ -43,7 +43,7 @@ jobs:
         LUCI=$(find ../openwrt/bin/packages/*/luci/ -type f -regex '.*\(app-smartdns\|package2\).*' 2>/dev/null || true)
         [ "$MYPKG" ] && cp -rf $MYPKG ./packages/
         [ "$LUCI" ] && cp -rf $LUCI ./packages/
-        EXLIST="luci-app-smartdns"
+        EXLIST="luci-i18n-app-smartdns"
 
         PRELIST=$(curl -s https://downloads.${{env.repo}}.org/releases/${{env.ver}}/targets/${{env.target}}/${{env.repo}}-${{env.ver}}-${{env.board}}-${{env.subtarget}}.manifest | awk '{print$1}')
 
@@ -103,23 +103,23 @@ jobs:
         collectd-mod-dns
         xray-core
         luci-proto-wireguard
-        luci-app-wol
-        luci-app-ddns
-        luci-app-samba4
-        luci-app-vnstat2
-        luci-app-statistics
-        luci-app-natmap
-        luci-app-upnp
-        luci-app-dockerman
-        luci-app-passwall
+        luci-i18n-app-wol
+        luci-i18n-app-ddns
+        luci-i18n-app-samba4
+        luci-i18n-app-vnstat2
+        luci-i18n-app-statistics
+        luci-i18n-app-natmap
+        luci-i18n-app-upnp
+        luci-i18n-app-dockerman
+        luci-i18n-app-passwall
         "
 
         TMPLIST="
         wpad-mbedtls
         rp-pppoe-relay
         luci-lib-docker
-        luci-app-dawn
-        luci-app-nlbwmon
+        luci-i18n-app-dawn
+        luci-i18n-app-nlbwmon
         "
 
         make image -j$(nproc) V=s \
