@@ -43,7 +43,7 @@ jobs:
         LUCI=$(find ../openwrt/bin/packages/*/luci/ -type f -regex '.*\(app-smartdns\|package2\).*' 2>/dev/null || true)
         [ "$MYPKG" ] && cp -rf $MYPKG ./packages/
         [ "$LUCI" ] && cp -rf $LUCI ./packages/
-        EXLIST="luci-i18n-app-smartdns"
+        EXLIST="luci-i18n-smartdns-zh-cn"
 
         PRELIST=$(curl -s https://downloads.${{env.repo}}.org/releases/${{env.ver}}/targets/${{env.target}}/${{env.repo}}-${{env.ver}}-${{env.board}}-${{env.subtarget}}.manifest | awk '{print$1}')
 
@@ -103,23 +103,23 @@ jobs:
         collectd-mod-dns
         xray-core
         luci-proto-wireguard
-        luci-i18n-app-wol
-        luci-i18n-app-ddns
-        luci-i18n-app-samba4
-        luci-i18n-app-vnstat2
-        luci-i18n-app-statistics
-        luci-i18n-app-natmap
-        luci-i18n-app-upnp
-        luci-i18n-app-dockerman
-        luci-i18n-app-passwall
+        luci-i18n-wol-zh-cn
+        luci-i18n-ddns-zh-cn
+        luci-i18n-samba4-zh-cn
+        luci-i18n-vnstat2-zh-cn
+        luci-i18n-statistics-zh-cn
+        luci-i18n-natmap-zh-cn
+        luci-i18n-upnp-zh-cn
+        luci-i18n-dockerman-zh-cn
+        luci-i18n-passwall-zh-cn
         "
 
         TMPLIST="
         wpad-mbedtls
         rp-pppoe-relay
         luci-lib-docker
-        luci-i18n-app-dawn
-        luci-i18n-app-nlbwmon
+        luci-i18n-dawn-zh-cn
+        luci-i18n-nlbwmon-zh-cn
         "
 
         make image -j$(nproc) V=s \
