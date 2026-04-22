@@ -26,6 +26,12 @@ runs:
         mv /tmp/gost ./files/usr/bin/gost
         echo chmod +x /usr/bin/gost > ./files/etc/uci-defaults/99-gost
 
+        lucky_ver=$(curl -s https://release.66666.host/ | grep -oP 'v\d+\.\d+\.\d+(?!\S*beta)' | sort -V | tail -1 | tr -d 'v')
+        wget -qO /tmp/lucky.tar.gz https://release.66666.host/v${lucky_ver}/${lucky_ver}_wanji_docker/lucky_${lucky_ver}_Linux_x86_64_wanji_docker.tar.gz
+        tar xzf /tmp/lucky.tar.gz -C /tmp
+        mv /tmp/lucky ./files/usr/bin/lucky
+        echo chmod +x /usr/bin/lucky > ./files/etc/uci-defaults/99-lucky
+
         [ ${{env.mode}} == none ] && exit 0
 
         # wget -qO $(ls -d ./target/linux/x86/patches-*)/600-bnx2x-warpcore-8727-2g5.patch https://raw.githubusercontent.com/JAMESMTL/snippets/master/bnx2x/patches/bnx2x_warpcore_8727_2_5g_sgmii_txfault.patch
