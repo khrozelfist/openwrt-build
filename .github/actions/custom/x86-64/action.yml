@@ -30,7 +30,7 @@ runs:
         wget -qO /tmp/lucky.tar.gz https://release.66666.host/v${lucky_ver}/${lucky_ver}_wanji_docker/lucky_${lucky_ver}_Linux_x86_64_wanji_docker.tar.gz
         tar xzf /tmp/lucky.tar.gz -C /tmp
         mv /tmp/lucky ./files/usr/bin/lucky
-        mv /tmp//scripts/luckyservice ./files/etc/init.d/lucky.daji
+        mv /tmp/scripts/luckyservice ./files/etc/init.d/lucky.daji
         cat > ./files/etc/uci-defaults/99-lucky <<EOF
         chmod +x /usr/bin/lucky
         /etc/init.d/lucky.daji enable
