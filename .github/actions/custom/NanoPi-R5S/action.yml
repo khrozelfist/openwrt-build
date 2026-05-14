@@ -13,17 +13,25 @@ runs:
         EOF
 
         mkdir -p ./files/etc/uci-defaults
+        mkdir -p ./files/etc/init.d
         mkdir -p ./files/usr/bin
+
         wget -qO /tmp/gost.tar.gz $(curl -s https://api.github.com/repos/go-gost/gost/releases/latest | jq -r '.assets[].browser_download_url' | grep linux_arm64)
         tar xzf /tmp/gost.tar.gz -C /tmp
         mv /tmp/gost ./files/usr/bin/gost
         echo chmod +x /usr/bin/gost > ./files/etc/uci-defaults/99-gost
 
         lucky_ver=$(curl -s https://release.66666.host/ | grep -oP 'v\d+\.\d+\.\d+(?!\S*beta)' | sort -V | tail -1 | tr -d 'v')
-        wget -qO /tmp/lucky.tar.gz https://release.66666.host/v${lucky_ver}/${lucky_ver}_wanji_docker/lucky_${lucky_ver}_Linux_arm64_wanji_docker.tar.gz
+        wget -qO /tmp/lucky.tar.gz https://release.66666.host/v${lucky_ver}/${lucky_ver}_wanji_docker/lucky_${lucky_ver}_Linux_x86_64_wanji_docker.tar.gz
         tar xzf /tmp/lucky.tar.gz -C /tmp
         mv /tmp/lucky ./files/usr/bin/lucky
-        echo chmod +x /usr/bin/lucky > ./files/etc/uci-defaults/99-lucky
+        mv /tmp/scripts/luckyservice ./files/etc/init.d/lucky.daji
+        cat > ./files/etc/uci-defaults/99-lucky <<EOF
+        chmod +x /usr/bin/lucky
+        chmod 755 /etc/init.d/lucky.daji
+        /etc/init.d/lucky.daji enable
+        /etc/init.d/lucky.daji start
+        EOF
 
         [ ${{env.mode}} == none ] && exit 0
 
