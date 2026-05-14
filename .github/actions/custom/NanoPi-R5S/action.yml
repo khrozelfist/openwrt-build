@@ -31,10 +31,8 @@ runs:
         SERVICE_USE_PID=1
         SERVICE_WRITE_PID=1
         SERVICE_DAEMONIZE=1
-        BIN=/usr/bin/lucky
-        CONF=/etc/lucky/lucky.conf
-        start() { service_start $BIN -c $CONF; }
-        stop() { service_stop $BIN; }
+        start() { service_start /usr/bin/lucky -c /etc/lucky/lucky.conf; }
+        stop() { service_stop /usr/bin/lucky; }
         EOF
         cat > ./files/etc/uci-defaults/99-lucky <<EOF
         chmod +x /usr/bin/lucky
