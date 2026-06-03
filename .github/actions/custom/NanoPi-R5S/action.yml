@@ -38,7 +38,6 @@ runs:
         chmod +x /usr/bin/lucky
         chmod 755 /etc/init.d/lucky.daji
         /etc/init.d/lucky.daji enable
-        /etc/init.d/lucky.daji start
         EOF
 
         [ ${{env.mode}} == none ] && exit 0
