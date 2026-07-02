@@ -44,7 +44,7 @@ runs:
         cat > ./files/etc/uci-defaults/99-lucky <<EOF
         chmod +x /usr/bin/lucky
         chmod 755 /etc/init.d/lucky.daji
-        /etc/init.d/lucky.daji enable
+        # /etc/init.d/lucky.daji enable
         EOF
 
         [ ${{env.mode}} == none ] && exit 0
