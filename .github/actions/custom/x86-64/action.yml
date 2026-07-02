@@ -30,7 +30,7 @@ runs:
 
         # lucky_ver=$(curl -s https://release.66666.host/ | grep -oP 'v\d+\.\d+\.\d+(?!\S*beta)' | sort -V | tail -1 | tr -d 'v')
         lucky_ver=$(curl -s https://release.66666.host/ | grep -oP 'v\d+\.\d+\.\d+(beta\d)?' | sort -V | tail -1 | tr -d 'v')
-        wget -qO /tmp/lucky.tar.gz https://release.66666.host/v${lucky_ver}/${lucky_ver}_wanji_docker/lucky_${lucky_ver}_Linux_x86_64_wanji_docker.tar.gz
+        wget -qO /tmp/lucky.tar.gz https://release.66666.host/v${lucky_ver}/${lucky_ver//beta*}_wanji_docker/lucky_${lucky_ver//beta*}_Linux_x86_64_wanji_docker.tar.gz
         tar xzf /tmp/lucky.tar.gz -C /tmp
         mv /tmp/lucky ./files/usr/bin/lucky
         cat > ./files/etc/init.d/lucky.daji <<EOF
