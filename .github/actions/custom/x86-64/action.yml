@@ -24,7 +24,7 @@ runs:
         mkdir -p ./files/usr/bin
 
         gost_url=$(curl -s https://api.github.com/repos/go-gost/gost/releases/latest | jq -r '.assets[].browser_download_url' | grep linux_amd64v3)
-        wget -qO /tmp/gost.tar.gz $gost_url || (echo $gost_url && exit 1)
+        wget -qO /tmp/gost.tar.gz $gost_url || (echo "$gost_url" && exit 1)
         tar xzf /tmp/gost.tar.gz -C /tmp
         mv /tmp/gost ./files/usr/bin/gost
         echo chmod +x /usr/bin/gost > ./files/etc/uci-defaults/99-gost
@@ -32,7 +32,7 @@ runs:
         # lucky_ver=$(curl -s https://release.66666.host/ | grep -oP 'v\d+\.\d+\.\d+(?!\S*beta)' | sort -V | tail -1 | tr -d 'v')
         lucky_ver=$(curl -s https://release.66666.host/ | grep -oP 'v\d+\.\d+\.\d+(beta\d)?' | sort -V | tail -1 | tr -d 'v')
         lucky_url="https://release.66666.host/v${lucky_ver}/${lucky_ver//beta*}_wanji_docker/lucky_${lucky_ver//beta*}_Linux_x86_64_wanji_docker.tar.gz"
-        wget -qO /tmp/lucky.tar.gz $lucky_url || (echo $lucky_url && exit 1)
+        wget -qO /tmp/lucky.tar.gz $lucky_url || (echo "$lucky_url" && exit 1)
         tar xzf /tmp/lucky.tar.gz -C /tmp
         mv /tmp/lucky ./files/usr/bin/lucky
         cat > ./files/etc/init.d/lucky.daji <<EOF
